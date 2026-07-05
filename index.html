@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masjid Al-Muslimun — Selakopi, Sindangbarang</title>
+<meta name="description" content="Portal resmi Masjid Al-Muslimun: jadwal shalat, jadwal Jumat & kajian, laporan keuangan transparan, dan infak online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     KONFIGURASI WARNA — flat, tanpa gradasi (selaras TV display)
+     ============================================================ */
+  :root{
+    --hijau:      #1F4D3B;  /* hijau masjid, warna utama */
+    --hijau-tua:  #14352A;  /* footer & teks di atas kuning */
+    --kuning:     #D9A441;  /* aksen: hanya untuk kartu Jumat */
+    --putih:      #FFFFFF;
+    --latar:      #F4F5F1;  /* latar halaman */
+    --teks:       #24312B;
+    --teks-redup: #66736C;
+    --garis:      #E2E5DF;
+    --radius: 14px;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+  body{
+    font-family:'Poppins', system-ui, sans-serif;
+    background:var(--latar);
+    color:var(--teks);
+    line-height:1.6;
+    font-size:15px;
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:760px; margin:0 auto; padding:0 20px; }
+
+  /* ---------- Header ---------- */
+  header{
+    background:var(--hijau);
+    color:var(--putih);
+    padding:40px 0 96px;
+  }
+  .masjid-label{
+    font-size:12px; font-weight:500; letter-spacing:.18em;
+    text-transform:uppercase; opacity:.75;
+  }
+  h1{
+    font-weight:700; font-size:clamp(26px,6vw,38px);
+    line-height:1.15; margin-top:6px;
+  }
+  .alamat{ font-size:13px; opacity:.8; margin-top:8px; }
+
+  /* ---------- Jadwal shalat hari ini ---------- */
+  .shalat-bar{
+    background:var(--putih);
+    border-radius:var(--radius);
+    box-shadow:0 6px 24px rgba(20,53,42,.10);
+    margin-top:-72px;
+    padding:18px 20px 14px;
+  }
+  .shalat-bar .judul-kecil{ display:flex; justify-content:space-between; align-items:baseline; }
+  .judul-kecil h2{ font-size:13px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--hijau); }
+  .judul-kecil span{ font-size:12px; color:var(--teks-redup); }
+  .shalat-grid{
+    display:grid; grid-template-columns:repeat(5,1fr);
+    margin-top:12px; text-align:center; gap:4px;
+  }
+  .shalat-grid .nama{ font-size:11px; font-weight:500; color:var(--teks-redup); text-transform:uppercase; letter-spacing:.06em; }
+  .shalat-grid .jam{ font-size:15px; font-weight:600; margin-top:2px; }
+  .shalat-grid .aktif .nama{ color:var(--hijau); }
+  .shalat-grid .aktif .jam{ color:var(--hijau); }
+
+  /* ---------- Bagian umum ---------- */
+  section{ padding:36px 0 8px; }
+  .eyebrow{
+    font-size:12px; font-weight:600; letter-spacing:.16em;
+    text-transform:uppercase; color:var(--hijau); margin-bottom:12px;
+  }
+
+  /* ---------- Kartu Jumat (signature) ---------- */
+  .kartu-jumat{
+    background:var(--kuning);
+    color:var(--hijau-tua);
+    border-radius:var(--radius);
+    padding:24px 22px;
+  }
+  .kartu-jumat .label{ font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; opacity:.8; }
+  .kartu-jumat .isi{ margin-top:10px; font-size:15px; }
+  .kartu-jumat .isi strong{ font-weight:700; font-size:18px; display:block; }
+  .kartu-jumat .isi .peran{ font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:.1em; opacity:.75; margin-top:12px; }
+
+  /* ---------- Tabel jadwal dari Sheet ---------- */
+  .tabel-jadwal{ width:100%; border-collapse:collapse; margin-top:14px; background:var(--putih); border-radius:var(--radius); overflow:hidden; }
+  .tabel-jadwal th{
+    background:var(--hijau); color:var(--putih);
+    font-size:12px; font-weight:600; letter-spacing:.06em; text-transform:uppercase;
+    text-align:left; padding:10px 14px;
+  }
+  .tabel-jadwal td{ padding:10px 14px; border-bottom:1px solid var(--garis); font-size:14px; }
+  .tabel-jadwal tr:last-child td{ border-bottom:none; }
+  .catatan-data{ font-size:12px; color:var(--teks-redup); margin-top:8px; }
+
+  /* ---------- Kartu transparansi ---------- */
+  .kartu-baris{ display:grid; gap:14px; grid-template-columns:1fr; margin-top:4px; }
+  @media(min-width:560px){ .kartu-baris{ grid-template-columns:1fr 1fr; } }
+  .kartu{
+    background:var(--putih); border:1px solid var(--garis);
+    border-radius:var(--radius); padding:20px;
+    text-decoration:none; display:block;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .kartu:hover, .kartu:focus-visible{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(20,53,42,.10); }
+  .kartu:focus-visible{ outline:3px solid var(--kuning); outline-offset:2px; }
+  .kartu h3{ font-size:16px; font-weight:600; color:var(--hijau); }
+  .kartu p{ font-size:13px; color:var(--teks-redup); margin-top:6px; }
+  .kartu .buka{ font-size:13px; font-weight:600; color:var(--hijau); margin-top:12px; display:inline-block; }
+
+  /* ---------- Infak ---------- */
+  .infak{
+    background:var(--putih); border:1px solid var(--garis);
+    border-radius:var(--radius); padding:22px; margin-top:4px;
+  }
+  .infak .rek{
+    background:var(--latar); border-radius:10px;
+    padding:14px 16px; margin-top:12px;
+    font-size:14px;
+  }
+  .infak .rek strong{ font-size:18px; font-weight:700; letter-spacing:.04em; display:block; color:var(--hijau); }
+  .btn-salin{
+    font-family:inherit; font-size:13px; font-weight:600;
+    background:var(--hijau); color:var(--putih);
+    border:none; border-radius:8px; padding:8px 16px;
+    margin-top:12px; cursor:pointer;
+  }
+  .btn-salin:focus-visible{ outline:3px solid var(--kuning); outline-offset:2px; }
+  .infak .qris-ket{ font-size:12px; color:var(--teks-redup); margin-top:10px; }
+
+  /* ---------- Footer ---------- */
+  footer{
+    background:var(--hijau-tua); color:var(--putih);
+    margin-top:44px; padding:28px 0 36px;
+    font-size:13px;
+  }
+  footer .nama{ font-weight:600; }
+  footer .redup{ opacity:.65; margin-top:4px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="masjid-label">DKM Masjid</div>
+    <h1>Al&#8209;Muslimun</h1>
+    <div class="alamat">Jalan Selakopi, Sindangbarang, Kota Bogor</div>
+  </div>
+</header>
+
+<div class="wrap">
+  <!-- Jadwal shalat hari ini -->
+  <div class="shalat-bar">
+    <div class="judul-kecil">
+      <h2>Jadwal Shalat Hari Ini</h2>
+      <span id="tanggal-hari-ini">—</span>
+    </div>
+    <div class="shalat-grid" id="shalat-grid">
+      <div><div class="nama">Subuh</div><div class="jam">—</div></div>
+      <div><div class="nama">Dzuhur</div><div class="jam">—</div></div>
+      <div><div class="nama">Ashar</div><div class="jam">—</div></div>
+      <div><div class="nama">Maghrib</div><div class="jam">—</div></div>
+      <div><div class="nama">Isya</div><div class="jam">—</div></div>
+    </div>
+  </div>
+
+  <!-- Jumat pekan ini -->
+  <section>
+    <div class="eyebrow">Jumat Pekan Ini</div>
+    <div class="kartu-jumat" id="kartu-jumat">
+      <div class="label">Shalat Jumat</div>
+      <div class="isi" id="isi-jumat">Memuat jadwal…</div>
+    </div>
+  </section>
+
+  <!-- Jadwal kajian / kegiatan dari Google Sheet -->
+  <section>
+    <div class="eyebrow">Jadwal &amp; Kegiatan</div>
+    <div id="jadwal-container">
+      <p class="catatan-data">Memuat data dari Google Sheet…</p>
+    </div>
+    <p class="catatan-data">Data yang sama dengan layar TV masjid — diperbarui langsung oleh pengurus DKM.</p>
+  </section>
+
+  <!-- Transparansi -->
+  <section>
+    <div class="eyebrow">Transparansi Keuangan</div>
+    <div class="kartu-baris">
+      <a class="kartu" href="https://diriyanto.work/al-muslimun/neraca/index.html">
+        <h3>Neraca Keuangan 2026</h3>
+        <p>Saldo, pemasukan, dan penyaluran dana masjid — diperbarui real&#8209;time.</p>
+        <span class="buka">Buka laporan &rarr;</span>
+      </a>
+      <a class="kartu" href="https://diriyanto.work/al-muslimun/index.html">
+        <h3>Rekapitulasi ZIS 2026</h3>
+        <p>Penerimaan dan distribusi zakat, infak, dan sedekah per komplek.</p>
+        <span class="buka">Buka rekap &rarr;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Infak -->
+  <section>
+    <div class="eyebrow">Infak &amp; Sedekah</div>
+    <div class="infak">
+      <p>Setiap rupiah tercatat dan dilaporkan terbuka pada laporan di atas.</p>
+      <div class="rek">
+        Bank Syariah Indonesia (BSI)
+        <strong id="no-rekening">0000&nbsp;0000&nbsp;0000</strong>
+        a.n. DKM Masjid Al&#8209;Muslimun
+      </div>
+      <button class="btn-salin" id="btn-salin" type="button">Salin nomor rekening</button>
+      <p class="qris-ket">QRIS infak tersedia di kotak amal dan papan pengumuman masjid.</p>
+    </div>
+  </section>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="nama">DKM Masjid Al-Muslimun</div>
+    <div class="redup">Jalan Selakopi, Sindangbarang, Kota Bogor · Portal ini dikelola oleh pengurus DKM</div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   KONFIGURASI — sesuaikan tiga nilai di bawah ini
+   ===================================================================== */
+const CONFIG = {
+  // ID Google Sheet jadwal (sumber yang sama dengan TV display).
+  // Sheet HARUS di-share: "Siapa saja yang memiliki link — Pelihat".
+  SHEET_ID: "1uiW9C_XY3q3S76wKYT3ISWl1zM_OyCbdot6nVjdK20o",
+
+  // Nama tab yang dibaca. Kosongkan ("") untuk tab pertama.
+  SHEET_TAB: "",
+
+  // Nomor rekening infak (tampil di halaman & tombol salin).
+  REKENING: "0000 0000 0000",
+
+  // Kota untuk jadwal shalat (API Aladhan, metode Kemenag).
+  KOTA: "Bogor"
+};
+
+/* ---------- Tanggal hari ini ---------- */
+const hariIni = new Date();
+document.getElementById("tanggal-hari-ini").textContent =
+  hariIni.toLocaleDateString("id-ID", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+
+/* ---------- Jadwal shalat (Aladhan, metode 20 = Kemenag RI) ---------- */
+(async function jadwalShalat(){
+  try{
+    const url = `https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(CONFIG.KOTA)}&country=Indonesia&method=20`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const t = data.data.timings;
+    const urutan = [["Subuh",t.Fajr],["Dzuhur",t.Dhuhr],["Ashar",t.Asr],["Maghrib",t.Maghrib],["Isya",t.Isha]];
+    const grid = document.getElementById("shalat-grid");
+    grid.innerHTML = "";
+    const jamSekarang = hariIni.getHours()*60 + hariIni.getMinutes();
+    let idxAktif = 0;
+    urutan.forEach((u,i)=>{
+      const [jm,mn] = u[1].split(":").map(Number);
+      if(jamSekarang >= jm*60+mn) idxAktif = i;
+    });
+    urutan.forEach((u,i)=>{
+      const div = document.createElement("div");
+      if(i === idxAktif) div.className = "aktif";
+      div.innerHTML = `<div class="nama">${u[0]}</div><div class="jam">${u[1]}</div>`;
+      grid.appendChild(div);
+    });
+  }catch(e){ /* biarkan tampilan default "—" bila gagal */ }
+})();
+
+/* ---------- Baca Google Sheet via GViz ---------- */
+async function bacaSheet(){
+  const tabParam = CONFIG.SHEET_TAB ? `&sheet=${encodeURIComponent(CONFIG.SHEET_TAB)}` : "";
+  const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json${tabParam}`;
+  const res = await fetch(url);
+  const teks = await res.text();
+  // Respons GViz dibungkus fungsi — ambil JSON di dalamnya
+  const json = JSON.parse(teks.substring(teks.indexOf("{"), teks.lastIndexOf("}")+1));
+  const kolom = json.table.cols.map(c => c.label || "");
+  const baris = json.table.rows.map(r => r.c.map(sel => (sel && sel.f) ? sel.f : (sel && sel.v != null ? String(sel.v) : "")));
+  return { kolom, baris };
+}
+
+(async function tampilkanJadwal(){
+  const wadah = document.getElementById("jadwal-container");
+  const isiJumat = document.getElementById("isi-jumat");
+  try{
+    const { kolom, baris } = await bacaSheet();
+    if(baris.length === 0) throw new Error("kosong");
+
+    // ---- Tabel kegiatan lengkap ----
+    const tabel = document.createElement("table");
+    tabel.className = "tabel-jadwal";
+    const kolomTampil = kolom.filter(k => k !== "");
+    tabel.innerHTML =
+      "<thead><tr>" + (kolomTampil.length ? kolomTampil : kolom).map(k=>`<th>${k || ""}</th>`).join("") + "</tr></thead>" +
+      "<tbody>" + baris.map(b=>"<tr>"+ b.slice(0, (kolomTampil.length||kolom.length)).map(v=>`<td>${v}</td>`).join("") +"</tr>").join("") + "</tbody>";
+    wadah.innerHTML = "";
+    wadah.appendChild(tabel);
+
+    // ---- Kartu Jumat: cari baris yang memuat kata "jumat" / kolom imam-khatib ----
+    const idxJumat = baris.findIndex(b => b.join(" ").toLowerCase().includes("jumat"));
+    const barisJumat = idxJumat >= 0 ? baris[idxJumat] : baris[0];
+    isiJumat.innerHTML = barisJumat
+      .map((v,i)=> v ? `<span class="peran">${kolom[i]||""}</span><strong>${v}</strong>` : "")
+      .join("");
+  }catch(e){
+    wadah.innerHTML = `<p class="catatan-data">Jadwal belum dapat dimuat. Pastikan Google Sheet di-share
+      "Siapa saja yang memiliki link — Pelihat", lalu muat ulang halaman ini.</p>`;
+    isiJumat.textContent = "Jadwal Jumat akan tampil di sini setelah Sheet tersambung.";
+  }
+})();
+
+/* ---------- Rekening & tombol salin ---------- */
+document.getElementById("no-rekening").textContent = CONFIG.REKENING;
+document.getElementById("btn-salin").addEventListener("click", async function(){
+  try{
+    await navigator.clipboard.writeText(CONFIG.REKENING.replace(/\s/g,""));
+    this.textContent = "Tersalin ✓";
+    setTimeout(()=>{ this.textContent = "Salin nomor rekening"; }, 2000);
+  }catch(e){ this.textContent = CONFIG.REKENING; }
+});
+</script>
+</body>
+</html>
