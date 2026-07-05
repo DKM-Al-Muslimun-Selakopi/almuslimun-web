@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Zakat Masjid Al Muslimun</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Rekapitulasi Zakat</h1>
+            <p>Masjid Al Muslimun - Ramadhan 1447 H / 2026 M</p>
+        </header>
+
+        <!-- Summary Cards -->
+        <div class="dashboard-grid">
+            <div class="card">
+                <div class="card-title">Total Beras</div>
+                <div id="total-beras" class="card-value">0 kg</div>
+                <div class="card-subtitle">Zakat Fitrah</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Total Uang</div>
+                <div id="total-uang" class="card-value">Rp 0</div>
+                <div class="card-subtitle">Zakat Fitrah</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Total Maal</div>
+                <div id="total-maal" class="card-value">Rp 0</div>
+                <div class="card-subtitle">Zakat Maal</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Infaq & Shodaqoh</div>
+                <div id="total-infaq" class="card-value">Rp 0</div>
+                <div class="card-subtitle">Lain-lain</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="card">
+                <div class="card-title">Distribusi per Komplek</div>
+                <div class="chart-container">
+                    <canvas id="komplekChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Tren Penerimaan Harian</div>
+                <div class="chart-container">
+                    <canvas id="dailyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="table-section">
+            <div class="table-header">
+                <h2>Daftar Muzakki</h2>
+                <input type="text" id="searchInput" class="search-box" placeholder="Cari nama atau komplek...">
+            </div>
+            <div class="table-wrapper">
+                <table id="muzakkiTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Nama</th>
+                            <th>Komplek</th>
+                            <th>Beras (kg)</th>
+                            <th>Uang (Rp)</th>
+                            <th>Zakat Maal</th>
+                            <th>Infaq</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Data will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

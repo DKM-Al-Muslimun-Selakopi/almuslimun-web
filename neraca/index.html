@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neraca Keuangan Masjid Al Muslimun - 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Neraca Keuangan</h1>
+            <p>Masjid Al Muslimun — Sindangbarang, Bogor · Tahun 2026</p>
+        </header>
+
+        <!-- Month Tabs -->
+        <div class="month-tabs" id="monthTabs"></div>
+
+        <!-- Summary Cards -->
+        <div class="dashboard-grid">
+            <div class="card card-saldo">
+                <div class="card-title">Saldo Awal Bulan</div>
+                <div id="saldo-awal" class="card-value">Rp 0</div>
+                <div class="card-subtitle" id="saldo-awal-label">—</div>
+            </div>
+            <div class="card card-masuk">
+                <div class="card-title">Pemasukan Bulan Ini</div>
+                <div id="total-masuk" class="card-value">Rp 0</div>
+                <div class="card-subtitle">Total penerimaan</div>
+            </div>
+            <div class="card card-keluar">
+                <div class="card-title">Pengeluaran Bulan Ini</div>
+                <div id="total-keluar" class="card-value">Rp 0</div>
+                <div class="card-subtitle">Total pengeluaran</div>
+            </div>
+            <div class="card card-akhir">
+                <div class="card-title">Saldo Akhir Bulan</div>
+                <div id="saldo-akhir" class="card-value">Rp 0</div>
+                <div class="card-subtitle" id="saldo-akhir-label">—</div>
+            </div>
+        </div>
+
+        <!-- Balance Breakdown -->
+        <div class="breakdown-bar" id="breakdownBar">
+            <div class="breakdown-item">
+                <span class="breakdown-dot dot-bank"></span>
+                <span>Dana di Rekening BSI</span>
+                <strong id="dana-rekening">Rp 0</strong>
+            </div>
+            <div class="breakdown-item">
+                <span class="breakdown-dot dot-cash"></span>
+                <span>Cash</span>
+                <strong id="dana-cash">Rp 0</strong>
+            </div>
+            <div class="breakdown-item">
+                <span class="breakdown-dot dot-total"></span>
+                <span>Total</span>
+                <strong id="dana-total">Rp 0</strong>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="card">
+                <div class="card-title">Tren Pemasukan vs Pengeluaran</div>
+                <div class="chart-container">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Perkembangan Saldo Kas</div>
+                <div class="chart-container">
+                    <canvas id="saldoChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Tables -->
+        <div class="tables-grid">
+            <!-- Penerimaan -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h2>Rincian Penerimaan</h2>
+                    <input type="text" class="search-box" id="searchMasuk" placeholder="Cari penerimaan...">
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Uraian</th>
+                                <th class="text-right">Jumlah (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableMasuk"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-right"><strong>Total Penerimaan</strong></td>
+                                <td class="text-right"><strong id="totalMasukRow">Rp 0</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pengeluaran -->
+            <div class="table-section">
+                <div class="table-header">
+                    <h2>Rincian Pengeluaran</h2>
+                    <input type="text" class="search-box" id="searchKeluar" placeholder="Cari pengeluaran...">
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Uraian</th>
+                                <th class="text-right">Jumlah (Rp)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableKeluar"></tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-right"><strong>Total Pengeluaran</strong></td>
+                                <td class="text-right"><strong id="totalKeluarRow">Rp 0</strong></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>DKM Al Muslimun · Jl. Selakopi, Sindangbarang, Bogor Barat</p>
+            <p class="footer-note">Data diperbarui secara real-time dari Google Spreadsheet · <span id="lastUpdate">—</span></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

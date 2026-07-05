@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DKM Al Muslimun — Notifikasi WA</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕌</text></svg>">
+  <meta name="description" content="Dashboard Notifikasi WhatsApp DKM Masjid Al Muslimun">
+</head>
+<body>
+  <div class="app-container">
+    <!-- HEADER -->
+    <header class="app-header">
+      <h1 class="app-title">Notifikasi WhatsApp</h1>
+      <p class="app-subtitle">DKM Masjid Al Muslimun, Bogor</p>
+      <p class="app-clock" id="app-clock">🕒 — : — : — WIB</p>
+    </header>
+
+    <!-- NAVIGATION -->
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="dashboard">📊 Dashboard</button>
+      <button class="tab-btn" data-tab="jadwal">📅 Jadwal</button>
+      <button class="tab-btn" data-tab="tugas">📋 Marbot</button>
+      <button class="tab-btn" data-tab="kontak">👥 Kontak</button>
+      <button class="tab-btn" data-tab="log">📝 Log</button>
+    </nav>
+
+    <!-- TAB CONTENT -->
+    <main>
+      <div id="tab-dashboard" class="tab-content active"></div>
+      <div id="tab-jadwal" class="tab-content"></div>
+      <div id="tab-tugas" class="tab-content"></div>
+      <div id="tab-kontak" class="tab-content"></div>
+      <div id="tab-log" class="tab-content"></div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      DKM Masjid Al Muslimun • Jl. Selakopi, Sindangbarang, Bogor Barat
+      <div class="footer-note">Data bersumber dari Google Sheets • Live</div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
