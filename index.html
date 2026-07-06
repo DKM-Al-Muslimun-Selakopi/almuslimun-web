@@ -36,6 +36,17 @@
   a{ color:inherit; }
   .wrap{ max-width:760px; margin:0 auto; padding:0 20px; }
 
+  /* ---------- Navigasi atas (konsisten antar halaman) ---------- */
+  .topnav{ background:var(--putih); border-bottom:1px solid var(--garis); position:sticky; top:0; z-index:50; }
+  .topnav-inner{ display:flex; align-items:center; justify-content:space-between; height:58px; }
+  .topnav-brand{ display:flex; align-items:center; gap:.5rem; font-weight:700; font-size:16px; color:var(--hijau); text-decoration:none; }
+  .topnav-logo{ font-size:18px; }
+  .topnav-links{ display:flex; gap:.25rem; }
+  .topnav-links a{ padding:.4rem .8rem; border-radius:8px; font-size:14px; font-weight:500; color:var(--teks-redup); text-decoration:none; transition:background .15s ease, color .15s ease; }
+  .topnav-links a:hover{ background:var(--latar); color:var(--hijau); }
+  .topnav-links a[aria-current="page"]{ color:var(--hijau); font-weight:600; background:rgba(31,77,59,.08); }
+  @media(max-width:420px){ .topnav-brand{ font-size:15px; } .topnav-links a{ padding:.4rem .55rem; font-size:13px; } }
+
   /* ---------- Header ---------- */
   header{
     background:var(--hijau);
@@ -145,9 +156,23 @@
   }
   footer .nama{ font-weight:600; }
   footer .redup{ opacity:.65; margin-top:4px; }
+  .footer-links{ margin-top:14px; display:flex; gap:1rem; }
+  .footer-links a{ color:var(--putih); opacity:.8; text-decoration:none; font-size:13px; font-weight:500; }
+  .footer-links a:hover{ opacity:1; text-decoration:underline; }
 </style>
 </head>
 <body>
+
+<nav class="topnav">
+  <div class="wrap topnav-inner">
+    <a class="topnav-brand" href="./"><span class="topnav-logo">🕌</span> Al-Muslimun</a>
+    <div class="topnav-links">
+      <a href="./" aria-current="page">Beranda</a>
+      <a href="neraca/">Neraca</a>
+      <a href="zis/">ZIS</a>
+    </div>
+  </div>
+</nav>
 
 <header>
   <div class="wrap">
@@ -228,6 +253,11 @@
   <div class="wrap">
     <div class="nama">DKM Masjid Al-Muslimun</div>
     <div class="redup">Jalan Selakopi, Sindangbarang, Kota Bogor · Portal ini dikelola oleh pengurus DKM</div>
+    <nav class="footer-links">
+      <a href="./">Beranda</a>
+      <a href="neraca/">Neraca</a>
+      <a href="zis/">ZIS</a>
+    </nav>
   </div>
 </footer>
 
