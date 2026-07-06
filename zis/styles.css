@@ -73,7 +73,7 @@ body {
     text-decoration: none;
 }
 
-.topnav-logo { font-size: 1.15rem; }
+.topnav-logo { height: 32px; width: 32px; display: block; }
 
 .topnav-links { display: flex; gap: 0.25rem; }
 
