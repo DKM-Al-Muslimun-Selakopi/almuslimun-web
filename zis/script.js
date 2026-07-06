@@ -72,7 +72,7 @@ function renderTable(data) {
         row.innerHTML = `
             <td>${item.no}</td>
             <td>${item.tanggal}</td>
-            <td style="font-weight: 600;">${item.nama}</td>
+            <td style="font-weight: 600;">${maskName(item.nama)}</td>
             <td><span class="badge ${getKomplekBadge(item.komplek)}">${item.komplek}</span></td>
             <td>${item.beras > 0 ? `${item.beras} kg` : '-'}</td>
             <td>${item.uang > 0 ? formatCurrency(item.uang) : '-'}</td>
@@ -164,6 +164,15 @@ function setupSearch() {
         );
         renderTable(filtered);
     });
+}
+
+// Sensor nama muzakki demi privasi: tiap kata jadi huruf pertama + bintang.
+// Contoh: "Dodi Iriyanto" -> "D*** I*******". Pencarian tetap memakai nama asli.
+function maskName(name) {
+    if (!name || name === '-') return name;
+    return name.trim().split(/\s+/).map(word =>
+        word.length <= 1 ? word : word.charAt(0) + '*'.repeat(word.length - 1)
+    ).join(' ');
 }
 
 function formatCurrency(amount) {
