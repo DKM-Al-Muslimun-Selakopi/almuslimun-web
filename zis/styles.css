@@ -44,6 +44,99 @@ body {
     padding: 2rem 1.25rem 1rem;
 }
 
+/* Navigasi atas (konsisten antar halaman) */
+.topnav {
+    background: var(--putih);
+    border-bottom: 1px solid var(--garis);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.topnav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.topnav-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--hijau);
+    text-decoration: none;
+}
+
+.topnav-logo { font-size: 1.15rem; }
+
+.topnav-links { display: flex; gap: 0.25rem; }
+
+.topnav-links a {
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--teks-redup);
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.topnav-links a:hover { background: var(--latar); color: var(--hijau); }
+
+.topnav-links a[aria-current="page"] {
+    color: var(--hijau);
+    font-weight: 600;
+    background: rgba(31, 77, 59, 0.08);
+}
+
+@media (max-width: 420px) {
+    .topnav-brand { font-size: 0.95rem; }
+    .topnav-links a { padding: 0.4rem 0.55rem; font-size: 0.82rem; }
+    .topnav-inner { padding: 0 0.75rem; }
+}
+
+/* Footer situs (konsisten dengan homepage) */
+.site-footer {
+    background: var(--hijau-tua);
+    color: var(--putih);
+    margin-top: 2.5rem;
+    padding: 28px 1.25rem 36px;
+}
+
+.site-footer-inner { max-width: 1100px; margin: 0 auto; }
+
+.site-footer-nama { font-weight: 600; }
+
+.site-footer-redup {
+    opacity: 0.7;
+    margin-top: 4px;
+    font-size: 0.8rem;
+}
+
+.site-footer-links {
+    margin-top: 14px;
+    display: flex;
+    gap: 1rem;
+}
+
+.site-footer-links a {
+    color: var(--putih);
+    opacity: 0.85;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.site-footer-links a:hover { opacity: 1; text-decoration: underline; }
+
+.site-footer-links a[aria-current="page"] { opacity: 1; font-weight: 700; }
+
 /* Header — banner hijau seperti homepage */
 header {
     background: var(--hijau);
