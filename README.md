@@ -14,8 +14,8 @@ Konten diperbarui cukup dengan mengedit Google Sheet — tanpa menyentuh kode.
 | `neraca/` | Neraca Keuangan Masjid | Google Sheet bendahara |
 | `zis/` | Rekapitulasi Zakat, Infak, Sedekah | Google Sheet bendahara |
 
-> Folder `neraca/` dan `zis/` saat ini berisi placeholder.
-> Salin file asli dari hosting lama (`diriyanto.work/al-muslimun/`) ke folder ini.
+> Folder `neraca/` dan `zis/` sudah berisi file asli hasil migrasi dari
+> hosting lama (`diriyanto.work/al-muslimun/`).
 
 ## Cara memperbarui konten (untuk pengurus)
 
