@@ -1,7 +1,10 @@
 # Neraca Keuangan
 
-Salin file situs neraca dari hosting lama ke folder ini:
-`https://diriyanto.work/al-muslimun/neraca/index.html` (beserta aset CSS/JS bila terpisah).
+Halaman neraca keuangan masjid — sudah dimigrasikan dari hosting lama
+(`diriyanto.work/al-muslimun/neraca/index.html`).
 
-Setelah disalin, halaman otomatis tersedia di `https://<domain-masjid>/neraca/`.
-Tautan di portal (`../index.html`) tinggal diubah dari URL lama ke `/neraca/`.
+Tersedia di `https://<domain-masjid>/neraca/`. Tautan di portal (`../index.html`)
+sudah mengarah ke `neraca/`.
+
+Sumber data: Google Sheet bendahara — tab `NERACA*` per bulan ditemukan otomatis
+(konfigurasi `SHEET_ID` ada di baris pertama `script.js`).

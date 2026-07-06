@@ -1,7 +1,10 @@
 # Rekapitulasi ZIS
 
-Salin file rekap ZIS dari hosting lama ke folder ini:
-`https://diriyanto.work/al-muslimun/index.html` (beserta aset bila terpisah).
+Halaman rekap Zakat, Infak, Sedekah — sudah dimigrasikan dari hosting lama
+(`diriyanto.work/al-muslimun/index.html`).
 
-Setelah disalin, halaman tersedia di `https://<domain-masjid>/zis/`.
-Tautan di portal tinggal diubah ke `/zis/`.
+Tersedia di `https://<domain-masjid>/zis/`. Tautan di portal (`../index.html`)
+sudah mengarah ke `zis/`.
+
+Sumber data: Google Sheet bendahara, tab `INPUT MUZAKKI`
+(konfigurasi `SHEET_ID` ada di baris pertama `script.js`).
