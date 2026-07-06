@@ -41,10 +41,20 @@ function getData() {
   const values = range.getValues();          // nilai mentah (untuk angka)
   const display = range.getDisplayValues();  // teks seperti tampil (untuk tanggal)
 
+  // Deteksi baris header (mengandung "nama" & "komplek"/"tanggal"); data mulai setelahnya.
+  let start = 1;
+  for (let i = 0; i < Math.min(values.length, 6); i++) {
+    const t = values[i].join(' ').toLowerCase();
+    if (t.indexOf('nama') !== -1 && (t.indexOf('komplek') !== -1 || t.indexOf('tanggal') !== -1)) {
+      start = i + 1;
+      break;
+    }
+  }
+
   // Kolom mengikuti tab INPUT MUZAKKI:
   // [1]=Tanggal, [2]=Nama, [3]=Komplek, [4]=Beras, [5]=Uang, [6]=Maal, [7]=Infaq
   const rows = [];
-  for (let i = 1; i < values.length; i++) { // i=1 → lewati baris header
+  for (let i = start; i < values.length; i++) {
     const v = values[i];
     const d = display[i];
     const nama = v[2];
