@@ -2,6 +2,12 @@ const SHEET_ID = '1mQZypiBnu428YN-SCSAL38R_3C9Xwq_FuqwZ6Fq6oW8';
 const SHEET_NAME = 'INPUT MUZAKKI';
 const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(SHEET_NAME)}`;
 
+// Setelah men-deploy Apps Script (lihat folder /apps-script), tempel URL Web App
+// (berakhiran /exec) di sini. Bila diisi: data dibaca dari Apps Script yang SUDAH
+// menyensor nama di server — Sheet boleh dibuat privat. Bila kosong: fallback ke
+// Google Sheet publik (GViz) dengan penyensoran di sisi browser.
+const APPS_SCRIPT_URL = '';
+
 let allData = [];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -11,41 +17,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function fetchData() {
     try {
-        const response = await fetch(GVIZ_URL);
-        const text = await response.text();
-        
-        // Extract JSON from Google's response wrapper
-        const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w\W]*)\);/)[1];
-        const data = JSON.parse(jsonStr);
-        
-        processData(data.table);
+        const data = APPS_SCRIPT_URL ? await fetchFromAppsScript() : await fetchFromGViz();
+        allData = data;
+        allData.forEach((item, i) => { item.no = i + 1; });
+
+        updateSummary(allData);
+        renderTable(allData);
+        renderCharts(allData);
     } catch (error) {
         console.error('Error fetching data:', error);
-        alert('Gagal mengambil data dari Google Sheets. Pastikan spreadsheet publik.');
+        alert('Gagal mengambil data rekap ZIS. Coba muat ulang halaman.');
     } finally {
         document.getElementById('loader').classList.add('hidden');
     }
 }
 
-function processData(table) {
-    const rows = table.rows;
-    allData = rows.map((row, index) => {
-        const cells = row.c;
-        return {
-            no: index + 1,
-            tanggal: cells[1] ? cells[1].f : '-',
-            nama: cells[2] ? cells[2].v : '-',
-            komplek: cells[3] ? cells[3].v : '-',
-            beras: cells[4] ? parseFloat(cells[4].v) || 0 : 0,
-            uang: cells[5] ? parseFloat(cells[5].v) || 0 : 0,
-            maal: cells[6] ? parseFloat(cells[6].v) || 0 : 0,
-            infaq: cells[7] ? parseFloat(cells[7].v) || 0 : 0
+// Sumber aman: Apps Script via JSONP. Nama sudah tersensor di server.
+function fetchFromAppsScript() {
+    return new Promise((resolve, reject) => {
+        const cb = '__ziscb_' + Date.now();
+        const script = document.createElement('script');
+        const cleanup = () => { delete window[cb]; script.remove(); };
+        window[cb] = (res) => {
+            cleanup();
+            if (res && res.ok) resolve(res.data);
+            else reject(new Error(res && res.error ? res.error : 'respons Apps Script tidak valid'));
         };
-    }).filter(item => item.nama !== '-'); // Filter out empty rows
+        script.onerror = () => { cleanup(); reject(new Error('gagal memuat data dari Apps Script')); };
+        script.src = APPS_SCRIPT_URL + (APPS_SCRIPT_URL.includes('?') ? '&' : '?') + 'callback=' + cb;
+        document.head.appendChild(script);
+    });
+}
 
-    updateSummary(allData);
-    renderTable(allData);
-    renderCharts(allData);
+// Fallback: Google Sheet publik (GViz). Nama disensor di sisi browser.
+async function fetchFromGViz() {
+    const response = await fetch(GVIZ_URL);
+    const text = await response.text();
+    const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S\w\W]*)\);/)[1];
+    const table = JSON.parse(jsonStr).table;
+
+    return table.rows.map((row) => {
+        const c = row.c;
+        return {
+            tanggal: c[1] ? c[1].f : '-',
+            nama: maskName(c[2] ? c[2].v : '-'),
+            komplek: c[3] ? c[3].v : '-',
+            beras: c[4] ? parseFloat(c[4].v) || 0 : 0,
+            uang: c[5] ? parseFloat(c[5].v) || 0 : 0,
+            maal: c[6] ? parseFloat(c[6].v) || 0 : 0,
+            infaq: c[7] ? parseFloat(c[7].v) || 0 : 0
+        };
+    }).filter(item => item.nama && item.nama !== '-');
+}
+
+// Sensor nama muzakki: tiap kata jadi huruf pertama + bintang.
+// Contoh: "Dodi Iriyanto" -> "D*** I*******". Dipakai untuk jalur fallback GViz;
+// pada jalur Apps Script, penyensoran sudah dilakukan di server.
+function maskName(name) {
+    if (!name || name === '-') return name;
+    return name.trim().split(/\s+/).map(word =>
+        word.length <= 1 ? word : word.charAt(0) + '*'.repeat(word.length - 1)
+    ).join(' ');
 }
 
 function updateSummary(data) {
@@ -66,13 +98,13 @@ function updateSummary(data) {
 function renderTable(data) {
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
-    
+
     data.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${item.no}</td>
             <td>${item.tanggal}</td>
-            <td style="font-weight: 600;">${maskName(item.nama)}</td>
+            <td style="font-weight: 600;">${item.nama}</td>
             <td><span class="badge ${getKomplekBadge(item.komplek)}">${item.komplek}</span></td>
             <td>${item.beras > 0 ? `${item.beras} kg` : '-'}</td>
             <td>${item.uang > 0 ? formatCurrency(item.uang) : '-'}</td>
@@ -158,21 +190,12 @@ function setupSearch() {
     const searchInput = document.getElementById('searchInput');
     searchInput.addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
-        const filtered = allData.filter(item => 
-            item.nama.toLowerCase().includes(term) || 
+        const filtered = allData.filter(item =>
+            item.nama.toLowerCase().includes(term) ||
             item.komplek.toLowerCase().includes(term)
         );
         renderTable(filtered);
     });
-}
-
-// Sensor nama muzakki demi privasi: tiap kata jadi huruf pertama + bintang.
-// Contoh: "Dodi Iriyanto" -> "D*** I*******". Pencarian tetap memakai nama asli.
-function maskName(name) {
-    if (!name || name === '-') return name;
-    return name.trim().split(/\s+/).map(word =>
-        word.length <= 1 ? word : word.charAt(0) + '*'.repeat(word.length - 1)
-    ).join(' ');
 }
 
 function formatCurrency(amount) {
