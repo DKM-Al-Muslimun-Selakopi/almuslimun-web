@@ -12,7 +12,6 @@ let allData = [];
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchData();
-    setupSearch();
 });
 
 async function fetchData() {
@@ -183,18 +182,6 @@ function renderCharts(data) {
                 legend: { display: false }
             }
         }
-    });
-}
-
-function setupSearch() {
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = allData.filter(item =>
-            item.nama.toLowerCase().includes(term) ||
-            item.komplek.toLowerCase().includes(term)
-        );
-        renderTable(filtered);
     });
 }
 
