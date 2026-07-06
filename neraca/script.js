@@ -323,8 +323,8 @@ function renderTrendCharts() {
         data: {
             labels: labels,
             datasets: [
-                { label: 'Pemasukan', data: masukData, backgroundColor: 'rgba(22, 163, 74, 0.7)', borderColor: '#16a34a', borderWidth: 1, borderRadius: 6 },
-                { label: 'Pengeluaran', data: keluarData, backgroundColor: 'rgba(239, 68, 68, 0.7)', borderColor: '#ef4444', borderWidth: 1, borderRadius: 6 }
+                { label: 'Pemasukan', data: masukData, backgroundColor: 'rgba(46, 125, 79, 0.75)', borderColor: '#2E7D4F', borderWidth: 1, borderRadius: 6 },
+                { label: 'Pengeluaran', data: keluarData, backgroundColor: 'rgba(192, 73, 47, 0.75)', borderColor: '#C0492F', borderWidth: 1, borderRadius: 6 }
             ]
         },
         options: {
@@ -349,9 +349,9 @@ function renderTrendCharts() {
             labels: labels,
             datasets: [{
                 label: 'Saldo Kas', data: saldoData,
-                borderColor: '#0f766e', backgroundColor: 'rgba(15, 118, 110, 0.1)',
+                borderColor: '#1F4D3B', backgroundColor: 'rgba(31, 77, 59, 0.1)',
                 fill: true, tension: 0.4, pointRadius: 5,
-                pointBackgroundColor: '#0f766e', pointBorderColor: '#fff', pointBorderWidth: 2
+                pointBackgroundColor: '#1F4D3B', pointBorderColor: '#fff', pointBorderWidth: 2
             }]
         },
         options: {

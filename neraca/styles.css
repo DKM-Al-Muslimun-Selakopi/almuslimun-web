@@ -1,69 +1,93 @@
 :root {
-    --primary: #0f766e;
-    --primary-light: #14b8a6;
-    --secondary: #6366f1;
-    --danger: #ef4444;
-    --danger-light: #fee2e2;
-    --success: #16a34a;
-    --success-light: #dcfce7;
-    --bg: #f8fafc;
-    --card-bg: rgba(255, 255, 255, 0.8);
-    --text: #1e293b;
-    --text-muted: #64748b;
-    --border: #e2e8f0;
-    --radius: 16px;
-    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    /* Brand — selaras dengan homepage (flat, tanpa gradasi) */
+    --hijau:      #1F4D3B;
+    --hijau-tua:  #14352A;
+    --hijau-muda: #2F6A52;
+    --kuning:     #D9A441;
+    --putih:      #FFFFFF;
+    --latar:      #F4F5F1;
+    --teks:       #24312B;
+    --teks-redup: #66736C;
+    --garis:      #E2E5DF;
+    --radius:     14px;
+    --shadow:     0 6px 24px rgba(20, 53, 42, .08);
+    --shadow-lg:  0 10px 28px rgba(20, 53, 42, .14);
+
+    /* Semantik pemasukan / pengeluaran (earthy, selaras palet) */
+    --success:       #2E7D4F;
+    --success-light: #dcefe0;
+    --danger:        #C0492F;
+    --danger-light:  #f6e2dc;
+
+    /* Alias agar aturan lama tetap terpetakan ke brand */
+    --primary:       var(--hijau);
+    --primary-light: var(--hijau-muda);
+    --secondary:     var(--kuning);
+    --bg:            var(--latar);
+    --card-bg:       var(--putih);
+    --text:          var(--teks);
+    --text-muted:    var(--teks-redup);
+    --border:        var(--garis);
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Outfit', 'Inter', sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
 }
 
 body {
-    background: var(--bg);
-    color: var(--text);
+    background: var(--latar);
+    color: var(--teks);
     line-height: 1.5;
-    background-image:
-        radial-gradient(at 0% 0%, rgba(20, 184, 166, 0.1) 0px, transparent 50%),
-        radial-gradient(at 100% 0%, rgba(99, 102, 241, 0.1) 0px, transparent 50%);
     min-height: 100vh;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 2rem 1.25rem 1rem;
 }
 
-/* Header */
+/* Header — banner hijau seperti homepage */
 header {
+    background: var(--hijau);
+    color: var(--putih);
+    border-radius: var(--radius);
+    padding: 26px 28px 30px;
     margin-bottom: 2rem;
-    text-align: center;
+}
+
+header::before {
+    content: "DKM Masjid Al-Muslimun";
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    opacity: .75;
+    margin-bottom: 8px;
 }
 
 header h1 {
-    font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 0.5rem;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--putih);
+    margin-bottom: 4px;
 }
 
 header p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
+    color: rgba(255, 255, 255, .8);
+    font-size: 0.95rem;
 }
 
 /* Month Tabs */
 .month-tabs {
     display: flex;
     gap: 0.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -71,75 +95,75 @@ header p {
 .month-tab {
     padding: 0.5rem 1.25rem;
     border-radius: 9999px;
-    border: 1px solid var(--border);
-    background: white;
+    border: 1px solid var(--garis);
+    background: var(--putih);
     cursor: pointer;
-    font-size: 0.875rem;
+    font-family: inherit;
+    font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text-muted);
-    transition: all 0.3s ease;
+    color: var(--teks-redup);
+    transition: all 0.15s ease;
 }
 
 .month-tab:hover {
-    border-color: var(--primary-light);
-    color: var(--primary);
+    border-color: var(--hijau);
+    color: var(--hijau);
 }
 
 .month-tab.active {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    border-color: transparent;
+    background: var(--hijau);
+    color: var(--putih);
+    border-color: var(--hijau);
 }
 
 /* Dashboard Grid */
 .dashboard-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 1.5rem;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
 }
 
 .card {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: var(--putih);
+    border: 1px solid var(--garis);
     border-radius: var(--radius);
     padding: 1.5rem;
     box-shadow: var(--shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform .15s ease, box-shadow .15s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
 }
 
 .card-title {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--teks-redup);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
     margin-bottom: 0.5rem;
 }
 
 .card-value {
     font-size: 1.75rem;
     font-weight: 700;
+    color: var(--hijau);
 }
 
 .card-subtitle {
     font-size: 0.75rem;
-    color: var(--text-muted);
+    color: var(--teks-redup);
     margin-top: 0.25rem;
 }
 
 /* Card color variants */
-.card-saldo .card-value { color: var(--secondary); }
-.card-masuk .card-value { color: var(--success); }
+.card-saldo  .card-value { color: var(--hijau-muda); }
+.card-masuk  .card-value { color: var(--success); }
 .card-keluar .card-value { color: var(--danger); }
-.card-akhir .card-value { color: var(--primary); }
+.card-akhir  .card-value { color: var(--hijau); }
 
 /* Breakdown Bar */
 .breakdown-bar {
@@ -147,12 +171,11 @@ header p {
     gap: 2rem;
     justify-content: center;
     flex-wrap: wrap;
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: var(--putih);
+    border: 1px solid var(--garis);
     border-radius: var(--radius);
     padding: 1.25rem 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     box-shadow: var(--shadow);
 }
 
@@ -161,11 +184,11 @@ header p {
     align-items: center;
     gap: 0.5rem;
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: var(--teks-redup);
 }
 
 .breakdown-item strong {
-    color: var(--text);
+    color: var(--teks);
     font-weight: 700;
 }
 
@@ -176,16 +199,16 @@ header p {
     display: inline-block;
 }
 
-.dot-bank { background: var(--primary); }
-.dot-cash { background: var(--primary-light); }
-.dot-total { background: var(--secondary); }
+.dot-bank  { background: var(--hijau); }
+.dot-cash  { background: var(--kuning); }
+.dot-total { background: var(--hijau-tua); }
 
 /* Charts Section */
 .charts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 @media (max-width: 600px) {
@@ -204,8 +227,8 @@ header p {
 .tables-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
 }
 
 @media (max-width: 600px) {
@@ -216,9 +239,8 @@ header p {
 
 /* Table Section */
 .table-section {
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: var(--putih);
+    border: 1px solid var(--garis);
     border-radius: var(--radius);
     padding: 1.5rem;
     box-shadow: var(--shadow);
@@ -235,24 +257,26 @@ header p {
 }
 
 .table-header h2 {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 700;
+    color: var(--teks);
 }
 
 .search-box {
     padding: 0.625rem 1rem;
-    border: 1px solid var(--border);
+    border: 1px solid var(--garis);
     border-radius: 9999px;
-    background: white;
+    background: var(--putih);
     width: 100%;
     max-width: 250px;
     outline: none;
-    transition: border-color 0.3s ease;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
     font-size: 0.85rem;
 }
 
 .search-box:focus {
-    border-color: var(--primary);
+    border-color: var(--hijau);
 }
 
 .table-wrapper {
@@ -269,36 +293,37 @@ table {
 
 th {
     padding: 0.75rem 1rem;
-    background: #ffffff;
+    background: var(--hijau);
     font-weight: 600;
-    color: var(--primary);
-    font-size: 0.8rem;
+    color: var(--putih);
+    font-size: 0.72rem;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
     position: sticky;
     top: 0;
     z-index: 10;
-    border-bottom: 2px solid var(--primary);
 }
 
 td {
     padding: 0.75rem 1rem;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--garis);
     font-size: 0.875rem;
 }
 
 tfoot td {
     border-bottom: none;
-    border-top: 2px solid var(--primary);
-    background: rgba(15, 118, 110, 0.05);
+    border-top: 2px solid var(--hijau);
+    background: rgba(31, 77, 59, 0.05);
+    position: sticky;
+    bottom: 0;
 }
 
-tr:last-child td {
+tbody tr:last-child td {
     border-bottom: none;
 }
 
-tr:hover td {
-    background: rgba(15, 118, 110, 0.02);
+tbody tr:hover td {
+    background: rgba(31, 77, 59, 0.03);
 }
 
 .text-right {
@@ -306,15 +331,15 @@ tr:hover td {
 }
 
 .amount-pos { color: var(--success); font-weight: 600; }
-.amount-neg { color: var(--danger); font-weight: 600; }
+.amount-neg { color: var(--danger);  font-weight: 600; }
 
 /* Footer */
 footer {
     text-align: center;
-    color: var(--text-muted);
+    color: var(--teks-redup);
     font-size: 0.85rem;
     padding: 2rem 0;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--garis);
     margin-top: 1rem;
 }
 
@@ -333,15 +358,15 @@ footer {
     position: fixed;
     top: 0;
     left: 0;
-    background: var(--bg);
+    background: var(--latar);
     z-index: 1000;
 }
 
 .spinner {
     width: 40px;
     height: 40px;
-    border: 4px solid var(--border);
-    border-top: 4px solid var(--primary);
+    border: 4px solid var(--garis);
+    border-top: 4px solid var(--hijau);
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }

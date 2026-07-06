@@ -98,7 +98,7 @@ function renderCharts(data) {
             datasets: [{
                 data: complexData,
                 backgroundColor: [
-                    '#0f766e', '#14b8a6', '#6366f1', '#8b5cf6', '#f43f5e', '#f59e0b'
+                    '#1F4D3B', '#D9A441', '#2F6A52', '#14352A', '#9AA88F', '#B5843B'
                 ],
                 borderWidth: 0
             }]
@@ -128,12 +128,12 @@ function renderCharts(data) {
             datasets: [{
                 label: 'Penerimaan Uang (Total)',
                 data: dailyTotals,
-                borderColor: '#14b8a6',
-                backgroundColor: 'rgba(20, 184, 166, 0.1)',
+                borderColor: '#1F4D3B',
+                backgroundColor: 'rgba(31, 77, 59, 0.1)',
                 fill: true,
                 tension: 0.4,
                 pointRadius: 4,
-                pointBackgroundColor: '#14b8a6'
+                pointBackgroundColor: '#1F4D3B'
             }]
         },
         options: {
