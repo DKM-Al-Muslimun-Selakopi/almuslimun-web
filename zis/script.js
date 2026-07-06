@@ -6,7 +6,7 @@ const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx
 // (berakhiran /exec) di sini. Bila diisi: data dibaca dari Apps Script yang SUDAH
 // menyensor nama di server — Sheet boleh dibuat privat. Bila kosong: fallback ke
 // Google Sheet publik (GViz) dengan penyensoran di sisi browser.
-const APPS_SCRIPT_URL = '';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwB-J6EYbRqhwkWoeQfaVmHObsxwqWLxbIRPjY-uUQphtmDo3sHW5FpjsMC3gV3JOAswQ/exec';
 
 let allData = [];
 
@@ -39,8 +39,16 @@ function fetchFromAppsScript() {
         const cleanup = () => { delete window[cb]; script.remove(); };
         window[cb] = (res) => {
             cleanup();
-            if (res && res.ok) resolve(res.data);
-            else reject(new Error(res && res.error ? res.error : 'respons Apps Script tidak valid'));
+            if (res && res.ok) {
+                // Buang baris header yang mungkin ikut terbawa dari Sheet.
+                const rows = (res.data || []).filter(r =>
+                    String(r.komplek).trim().toLowerCase() !== 'komplek' &&
+                    String(r.tanggal).trim().toLowerCase() !== 'tanggal'
+                );
+                resolve(rows);
+            } else {
+                reject(new Error(res && res.error ? res.error : 'respons Apps Script tidak valid'));
+            }
         };
         script.onerror = () => { cleanup(); reject(new Error('gagal memuat data dari Apps Script')); };
         script.src = APPS_SCRIPT_URL + (APPS_SCRIPT_URL.includes('?') ? '&' : '?') + 'callback=' + cb;
