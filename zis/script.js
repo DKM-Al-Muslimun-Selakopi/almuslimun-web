@@ -25,35 +25,45 @@ async function fetchData() {
         renderCharts(allData);
     } catch (error) {
         console.error('Error fetching data:', error);
-        alert('Gagal mengambil data rekap ZIS. Coba muat ulang halaman.');
+        showLoadError(error);
     } finally {
         document.getElementById('loader').classList.add('hidden');
     }
 }
 
-// Sumber aman: Apps Script via JSONP. Nama sudah tersensor di server.
-function fetchFromAppsScript() {
-    return new Promise((resolve, reject) => {
-        const cb = '__ziscb_' + Date.now();
-        const script = document.createElement('script');
-        const cleanup = () => { delete window[cb]; script.remove(); };
-        window[cb] = (res) => {
-            cleanup();
-            if (res && res.ok) {
-                // Buang baris header yang mungkin ikut terbawa dari Sheet.
-                const rows = (res.data || []).filter(r =>
-                    String(r.komplek).trim().toLowerCase() !== 'komplek' &&
-                    String(r.tanggal).trim().toLowerCase() !== 'tanggal'
-                );
-                resolve(rows);
-            } else {
-                reject(new Error(res && res.error ? res.error : 'respons Apps Script tidak valid'));
-            }
-        };
-        script.onerror = () => { cleanup(); reject(new Error('gagal memuat data dari Apps Script')); };
-        script.src = APPS_SCRIPT_URL + (APPS_SCRIPT_URL.includes('?') ? '&' : '?') + 'callback=' + cb;
-        document.head.appendChild(script);
-    });
+// Sumber aman: Apps Script. Nama sudah tersensor di server.
+// Memakai fetch() biasa — endpoint mengirim header CORS (allow-origin: *),
+// jadi tidak perlu JSONP. Ini lebih tahan terhadap pemblokir & kondisi
+// browser yang login ke banyak akun Google.
+async function fetchFromAppsScript() {
+    const res = await fetch(APPS_SCRIPT_URL, { redirect: 'follow' });
+    if (!res.ok) throw new Error('Apps Script menjawab HTTP ' + res.status);
+
+    let json;
+    try {
+        json = await res.json();
+    } catch (e) {
+        throw new Error('respons Apps Script bukan JSON (kemungkinan diblokir atau minta login)');
+    }
+    if (!json.ok) throw new Error(json.error || 'respons Apps Script tidak valid');
+
+    // Buang baris header yang mungkin ikut terbawa dari Sheet.
+    return (json.data || []).filter(r =>
+        String(r.komplek).trim().toLowerCase() !== 'komplek' &&
+        String(r.tanggal).trim().toLowerCase() !== 'tanggal'
+    );
+}
+
+// Tampilkan error di dalam halaman (bukan popup alert yang memblokir).
+function showLoadError(err) {
+    const tbody = document.getElementById('tableBody');
+    if (!tbody) return;
+    const pesan = String((err && err.message) || err);
+    tbody.innerHTML = `<tr><td colspan="8" style="padding:2rem;text-align:center;line-height:1.7;">
+        <strong>Data rekap ZIS belum dapat dimuat.</strong><br>
+        <span style="font-size:.85rem;color:#66736C;">Detail: ${pesan}</span><br>
+        <span style="font-size:.85rem;color:#66736C;">Coba muat ulang halaman. Bila memakai pemblokir iklan/VPN, nonaktifkan sementara untuk situs ini.</span>
+    </td></tr>`;
 }
 
 // Fallback: Google Sheet publik (GViz). Nama disensor di sisi browser.
