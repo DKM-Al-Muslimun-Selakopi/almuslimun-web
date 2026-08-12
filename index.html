@@ -234,7 +234,12 @@
     .topnav-links a{ font-size:11px; padding:10px 8px; }
     header{ overflow:hidden; padding:38px 0 104px; } h1{ font-size:35px; letter-spacing:-.06em; white-space:nowrap; }
     .shalat-bar{ margin-top:-70px; padding:16px 10px 14px; } .judul-kecil{ display:block !important; } .judul-kecil span{ display:block; margin-top:5px; }
-    .shalat-grid>div{ padding:0 3px; } .shalat-grid .jam{ font-size:14px; } .shalat-grid .nama{ font-size:8px; letter-spacing:.04em; } .shalat-grid .imam{ font-size:11px; }
+    .shalat-grid{ grid-template-columns:1fr; gap:0; margin-top:14px; text-align:left; }
+    .shalat-grid>div{ align-items:center; border-left:0; border-top:1px solid rgba(239,241,228,.18); display:grid; grid-template-columns:1fr auto minmax(116px,1.4fr); padding:10px 4px; }
+    .shalat-grid>div:first-child{ border-top:0; }
+    .shalat-grid .nama{ font-size:10px; letter-spacing:.08em; }
+    .shalat-grid .jam{ font-size:16px; margin:0 16px; }
+    .shalat-grid .imam{ font-size:12px; line-height:1.25; margin:0; min-height:0; text-align:right; }
     section{ padding-top:44px; } .tabel-jadwal{ display:block; overflow-x:auto; white-space:nowrap; } .tabel-jadwal th,.tabel-jadwal td{ padding:12px; }
   }
 </style>
