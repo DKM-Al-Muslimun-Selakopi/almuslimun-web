@@ -32,3 +32,7 @@ The homepage opens with a compact white masthead, a large left-aligned identity 
 ## Interaction
 
 Primary actions use yellow on ink. Focus rings use the brand green. Hover states shift color rather than elevation. Responsive layouts collapse grids to one or two columns below 820px and reduce navigation padding below 600px.
+
+## Accessibility sizing
+
+The site uses an enlarged reading scale for its older audience: 17px base text, 15px navigation, 17px imam names on desktop, and 14px imam names on mobile. Report labels, tables, metadata, and search controls are also increased from the compact reference scale while preserving the mono label hierarchy.
