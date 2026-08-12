@@ -372,7 +372,7 @@ const IMAM_FALLBACK = {
   "Senin":  { "Subuh":"Bpk. Rahmat Suhadi", "Dzuhur":"Bpk. Rakhmat Muharram", "Ashar":"Bpk. Dani", "Magrib":"Bpk. Erwan", "Isya":"Bpk. Yunus Nugraha" },
   "Selasa": { "Subuh":"Bpk. Yunus Nugraha", "Dzuhur":"Bpk. Dani", "Ashar":"Bpk. Ahmad Chozin", "Magrib":"Bpk. Dani", "Isya":"Bpk. Rahmat Suhadi" },
   "Rabu":   { "Subuh":"Bpk. Yunus Nugraha", "Dzuhur":"Bpk. Dani", "Ashar":"Bpk. Sudirman", "Magrib":"Bpk. Ahmad Chozin", "Isya":"Bpk. Dani" },
-  "Kamis":  { "Subuh":"Bpk. Dani", "Dzuhur":"Bpk. Rakhmat Muharram", "Ashar":"Bpk. Dani", "Magrib":"Bpk. Sudirman", "Isya":"Bpk. Pranoto" },
+  "Kamis":  { "Subuh":"Bpk. Dani", "Dzuhur":"Bpk. Rakhmat Muharram", "Ashar":"Bpk. Dani", "Magrib":"Bpk. Sudirman", "Isya":"Bpk. Prawoto" },
   "Jumat":  { "Subuh":"Bpk. Pranoto", "Dzuhur":"Khotib Jumat", "Ashar":"Bpk. Dani", "Magrib":"Bpk. Yunus Nugraha", "Isya":"Bpk. Sudirman" },
   "Sabtu":  { "Subuh":"Bpk. Yunus Nugraha", "Dzuhur":"Bpk. Rakhmat Muharram", "Ashar":"Bpk. Dani", "Magrib":"Bpk. Pranoto", "Isya":"Bpk. Rahmat Suhadi" },
   "Ahad":   { "Subuh":"Ustad pengisi ceramah subuh", "Dzuhur":"Bpk. Hardjanto", "Ashar":"Bpk. Erwan", "Magrib":"Bpk. Rahmat Suhadi", "Isya":"Bpk. Yunus Nugraha" }
@@ -405,7 +405,11 @@ async function bacaJadwalImam(){
       const rawPrayer = cells[1]?.v || cells[0]?.v;
       const prayer = rawPrayer === "Magrib" ? "Maghrib" : rawPrayer;
       if(!prayer) return;
-      headers.forEach((header, i) => { if(dayNames.includes(header)) result[prayer][header] = cells[i]?.v || "—"; });
+      headers.forEach((header, i) => {
+        if(!dayNames.includes(header)) return;
+        const value = cells[i]?.v || "—";
+        result[prayer][header] = (prayer === "Isya" && header === "Kamis" && value === "Bpk. Pranoto") ? "Bpk. Prawoto" : value;
+      });
     });
   }catch(e){ /* gunakan snapshot terakhir jika sheet tidak tersedia anonim */ }
   return result;
