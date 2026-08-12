@@ -102,6 +102,10 @@
   .kartu-jumat .isi{ margin-top:10px; font-size:15px; }
   .kartu-jumat .isi strong{ font-weight:700; font-size:18px; display:block; }
   .kartu-jumat .isi .peran{ font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:.1em; opacity:.75; margin-top:12px; }
+  .kartu-jumat .isi .baris-tgl{ font-size:13px; font-weight:500; opacity:.8; margin-top:4px; }
+  .kartu-jumat .isi .blok-kajian{ margin-top:18px; padding-top:16px; border-top:1px solid rgba(20,53,42,.22); }
+  .kartu-jumat .isi .blok-kajian .sub-judul{ font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; opacity:.85; }
+  .kartu-jumat .isi strong.tema{ font-size:16px; }
 
   /* ---------- Tabel jadwal dari Sheet ---------- */
   .tabel-jadwal{ width:100%; border-collapse:collapse; margin-top:14px; background:var(--putih); border-radius:var(--radius); overflow:hidden; }
@@ -274,6 +278,9 @@ const CONFIG = {
   // Nama tab yang dibaca. Kosongkan ("") untuk tab pertama.
   SHEET_TAB: "",
 
+  // gid tab "Jadwal Khotib & Kajian" (respons Google Form) untuk kartu Jumat pekan ini.
+  GID_JUMAT: "884524941",
+
   // Nomor rekening infak (tampil di halaman & tombol salin).
   REKENING: "7339737287",
 
@@ -326,30 +333,70 @@ async function bacaSheet(){
 
 (async function tampilkanJadwal(){
   const wadah = document.getElementById("jadwal-container");
-  const isiJumat = document.getElementById("isi-jumat");
   try{
     const { kolom, baris } = await bacaSheet();
     if(baris.length === 0) throw new Error("kosong");
 
-    // ---- Tabel kegiatan lengkap ----
+    // ---- Tabel kegiatan: sembunyikan kolom teknis Google Form (Timestamp, Email) ----
+    const sembunyi = ["timestamp", "email"];
+    const idx = kolom
+      .map((k, i) => i)
+      .filter(i => kolom[i] && !sembunyi.some(s => kolom[i].toLowerCase().includes(s)));
+
     const tabel = document.createElement("table");
     tabel.className = "tabel-jadwal";
-    const kolomTampil = kolom.filter(k => k !== "");
     tabel.innerHTML =
-      "<thead><tr>" + (kolomTampil.length ? kolomTampil : kolom).map(k=>`<th>${k || ""}</th>`).join("") + "</tr></thead>" +
-      "<tbody>" + baris.map(b=>"<tr>"+ b.slice(0, (kolomTampil.length||kolom.length)).map(v=>`<td>${v}</td>`).join("") +"</tr>").join("") + "</tbody>";
+      "<thead><tr>" + idx.map(i => `<th>${kolom[i]}</th>`).join("") + "</tr></thead>" +
+      "<tbody>" + baris.map(b => "<tr>" + idx.map(i => `<td>${b[i] || ""}</td>`).join("") + "</tr>").join("") + "</tbody>";
     wadah.innerHTML = "";
     wadah.appendChild(tabel);
-
-    // ---- Kartu Jumat: cari baris yang memuat kata "jumat" / kolom imam-khatib ----
-    const idxJumat = baris.findIndex(b => b.join(" ").toLowerCase().includes("jumat"));
-    const barisJumat = idxJumat >= 0 ? baris[idxJumat] : baris[0];
-    isiJumat.innerHTML = barisJumat
-      .map((v,i)=> v ? `<span class="peran">${kolom[i]||""}</span><strong>${v}</strong>` : "")
-      .join("");
   }catch(e){
     wadah.innerHTML = `<p class="catatan-data">Jadwal belum dapat dimuat. Pastikan Google Sheet di-share
       "Siapa saja yang memiliki link — Pelihat", lalu muat ulang halaman ini.</p>`;
+  }
+})();
+
+/* ---------- Kartu "Jumat Pekan Ini": khotib Jumat + kuliah subuh ---------- */
+(async function tampilkanJumat(){
+  const isiJumat = document.getElementById("isi-jumat");
+  try{
+    const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&gid=${CONFIG.GID_JUMAT}`;
+    const res = await fetch(url);
+    const teks = await res.text();
+    const json = JSON.parse(teks.substring(teks.indexOf("{"), teks.lastIndexOf("}")+1));
+    const rows = json.table.rows || [];
+    if(rows.length === 0) throw new Error("kosong");
+
+    // Kolom: [1]=Tgl Jum'at, [2]=Tgl Kajian, [3]=Khotib, [4]=Pengisi, [5]=Tema
+    const parseTgl = v => { const m = /Date\((\d+),(\d+),(\d+)/.exec(v || ""); return m ? new Date(+m[1], +m[2], +m[3]) : null; };
+    const val = c => (c && c.v != null) ? String(c.v).trim() : "";
+
+    const items = rows.map(r => ({
+      jumat:   parseTgl(r.c[1] && r.c[1].v),
+      kajian:  parseTgl(r.c[2] && r.c[2].v),
+      khotib:  val(r.c[3]),
+      pengisi: val(r.c[4]),
+      tema:    val(r.c[5])
+    })).filter(x => x.jumat);
+    if(items.length === 0) throw new Error("tanpa tanggal");
+
+    // Pilih "pekan ini": entri paling awal yang jadwalnya belum lewat.
+    // Pakai tanggal kajian (lebih akhir) agar kartu tetap tampil sampai kajian Ahad.
+    const kini = new Date(); kini.setHours(0, 0, 0, 0);
+    items.sort((a, b) => a.jumat - b.jumat);
+    const pekan = items.find(x => (x.kajian || x.jumat) >= kini) || items[items.length - 1];
+
+    const fmt = d => d ? d.toLocaleDateString("id-ID", { weekday:"long", day:"numeric", month:"long", year:"numeric" }) : "";
+    isiJumat.innerHTML = `
+      <span class="peran">Khotib</span><strong>${pekan.khotib || "—"}</strong>
+      <div class="baris-tgl">${fmt(pekan.jumat)}</div>
+      <div class="blok-kajian">
+        <div class="sub-judul">Kuliah Subuh</div>
+        <span class="peran">Pengisi</span><strong>${pekan.pengisi || "—"}</strong>
+        <span class="peran">Tema</span><strong class="tema">${pekan.tema || "—"}</strong>
+        <div class="baris-tgl">${fmt(pekan.kajian)}</div>
+      </div>`;
+  }catch(e){
     isiJumat.textContent = "Jadwal Jumat akan tampil di sini setelah Sheet tersambung.";
   }
 })();
