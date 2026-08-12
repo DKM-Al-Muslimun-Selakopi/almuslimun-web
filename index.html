@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Masjid Al-Muslimun — Selakopi, Sindangbarang</title>
+<title>Masjid Al-Muslimun: Selakopi, Sindangbarang</title>
 <meta name="description" content="Portal resmi Masjid Al-Muslimun: jadwal shalat, jadwal Jumat & kajian, laporan keuangan transparan, dan infak online.">
 <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Black&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
      KONFIGURASI WARNA — flat, tanpa gradasi (selaras TV display)
@@ -28,7 +28,7 @@
   html{ scroll-behavior:smooth; }
   @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
   body{
-    font-family:'Inter', system-ui, sans-serif;
+    font-family:'Archivo', system-ui, sans-serif;
     background:var(--latar);
     color:var(--teks);
     line-height:1.6;
@@ -164,9 +164,90 @@
   .footer-links{ margin-top:14px; display:flex; gap:1rem; }
   .footer-links a{ color:var(--putih); opacity:.8; text-decoration:none; font-size:13px; font-weight:500; }
   .footer-links a:hover{ opacity:1; text-decoration:underline; }
+
+  /* ============================================================
+     DESIGN SYSTEM v1 — Terang / website & dashboard
+     ============================================================ */
+  :root{
+    --ink:#2F4A22; --brand:#79A34C; --yellow:#FEEF10; --paper:#FBFBF7;
+    --body:#4A5142; --muted:#6B7263; --line:#E4E6DC; --panel:#F0F1E8;
+    --border:#D6D8CE; --radius:6px;
+  }
+  *{ box-shadow:none !important; }
+  body{ background:var(--paper); color:var(--body); font-family:'Archivo',system-ui,sans-serif; font-size:16px; }
+  .wrap{ max-width:1120px; padding:0 28px; }
+  .topnav{ background:var(--paper); border-bottom:1px solid var(--line); }
+  .topnav-inner{ height:72px; }
+  .topnav-brand{ color:var(--ink); font-family:'Archivo',sans-serif; font-size:16px; font-weight:800; letter-spacing:-.02em; }
+  .topnav-logo{ width:38px; height:38px; }
+  .topnav-links{ gap:6px; }
+  .topnav-links a{ border-radius:3px; color:var(--muted); font-family:'Archivo',sans-serif; font-size:13px; font-weight:600; padding:12px 14px; }
+  .topnav-links a:hover,.topnav-links a[aria-current="page"]{ background:var(--yellow); color:var(--ink); }
+  header{ background:var(--paper); color:var(--ink); padding:54px 0 124px; border-bottom:1px solid var(--line); }
+  .masjid-label,.eyebrow,.kartu-jumat .label,.kartu-jumat .isi .peran,.kartu-jumat .isi .sub-judul{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.14em; text-transform:uppercase; }
+  .masjid-label{ color:var(--brand); opacity:1; }
+  h1{ color:var(--ink); font-family:'Archivo Black','Archivo',sans-serif; font-size:clamp(48px,8vw,86px); letter-spacing:-.055em; line-height:.9; margin-top:14px; text-transform:uppercase; }
+  .alamat{ color:var(--muted); font-size:15px; margin-top:18px; }
+  .shalat-bar{ background:var(--ink); border-radius:6px; margin-top:-82px; padding:20px 24px 18px; }
+  .judul-kecil h2{ color:var(--yellow); font-family:'Archivo',sans-serif; font-size:14px; font-weight:800; letter-spacing:-.01em; text-transform:uppercase; }
+  .judul-kecil span{ color:#C8E0AC; font-family:'IBM Plex Mono',monospace; font-size:11px; }
+  .shalat-grid{ gap:0; margin-top:18px; }
+  .shalat-grid>div{ border-left:1px solid rgba(239,241,228,.18); padding:0 12px; }
+  .shalat-grid>div:first-child{ border-left:0; }
+  .shalat-grid .nama{ color:#B4C3A4; font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em; }
+  .shalat-grid .jam{ color:#EDF1E4; font-family:'IBM Plex Mono',monospace; font-size:20px; font-weight:600; margin-top:6px; }
+  .shalat-grid .aktif .nama,.shalat-grid .aktif .jam{ color:var(--yellow); }
+  .shalat-grid .imam{ color:#B4C3A4; font-size:15px; font-weight:600; line-height:1.25; margin-top:7px; min-height:36px; }
+  .shalat-grid .aktif .imam{ color:#C8E0AC; }
+  section{ padding:60px 0 0; }
+  .eyebrow{ color:var(--brand); margin-bottom:16px; }
+  .kartu-jumat{ background:var(--yellow); border-radius:6px; color:var(--ink); padding:28px 30px; }
+  .kartu-jumat .isi{ margin-top:16px; }
+  .kartu-jumat .isi strong{ font-family:'Archivo Black','Archivo',sans-serif; font-size:clamp(26px,4vw,42px); letter-spacing:-.04em; line-height:1; }
+  .kartu-jumat .isi .peran{ color:var(--ink); margin-top:18px; opacity:.72; }
+  .kartu-jumat .isi .baris-tgl{ color:#4F6B33; font-family:'IBM Plex Mono',monospace; font-size:13px; margin-top:6px; }
+  .kartu-jumat .isi .blok-kajian{ border-top:1px solid rgba(47,74,34,.28); margin-top:26px; padding-top:20px; }
+  .kartu-jumat .isi strong.tema{ font-family:'Archivo',sans-serif; font-size:18px; line-height:1.2; }
+  .tabel-jadwal{ background:var(--paper); border:1px solid var(--border); border-radius:6px; margin-top:0; overflow:hidden; }
+  .tabel-jadwal th{ background:var(--ink); color:var(--yellow); font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em; padding:14px 16px; }
+  .tabel-jadwal td{ border-bottom:1px solid var(--line); color:var(--body); font-size:14px; padding:16px; }
+  .catatan-data{ color:var(--muted); font-family:'IBM Plex Mono',monospace; font-size:11px; line-height:1.6; margin-top:12px; }
+  .kartu-baris{ gap:16px; }
+  .kartu{ background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:24px; }
+  .kartu:hover,.kartu:focus-visible{ background:var(--yellow); transform:none; }
+  .kartu:focus-visible,.btn-salin:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
+  .kartu h3{ color:var(--ink); font-family:'Archivo Black','Archivo',sans-serif; font-size:24px; letter-spacing:-.04em; line-height:1; }
+  .kartu p{ color:var(--body); font-size:14px; margin-top:12px; }
+  .kartu .buka{ color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:11px; font-weight:600; letter-spacing:.08em; margin-top:20px; text-transform:uppercase; }
+  .infak{ background:var(--ink); border:0; border-radius:6px; color:#EDF1E4; padding:28px 30px; }
+  .infak .rek{ background:#24391A; border:1px solid #456136; border-radius:3px; color:#C8E0AC; font-family:'IBM Plex Mono',monospace; font-size:12px; margin-top:20px; padding:16px 18px; }
+  .infak .rek strong{ color:var(--yellow); font-size:24px; letter-spacing:.02em; }
+  .btn-salin{ background:var(--yellow); border:0; border-radius:3px; color:var(--ink); font-family:'Archivo',sans-serif; font-size:13px; font-weight:700; margin-top:16px; min-height:44px; padding:12px 20px; }
+  .infak .qris-ket{ color:#B4C3A4; font-family:'IBM Plex Mono',monospace; font-size:11px; margin-top:14px; }
+  footer{ background:var(--ink); color:#EDF1E4; margin-top:72px; padding:36px 0 48px; }
+  footer .nama{ color:var(--yellow); font-weight:800; }
+  footer .redup{ color:#B4C3A4; opacity:1; }
+  .footer-links{ gap:18px; }
+  .footer-links a{ color:#EDF1E4; font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; }
+  @media(max-width:640px){
+    .wrap{ padding:0 18px; } .topnav-inner{ height:64px; } .topnav-brand{ font-size:14px; } .topnav-logo{ width:32px; height:32px; }
+    .topnav-links a{ font-size:11px; padding:10px 8px; }
+    header{ overflow:hidden; padding:38px 0 104px; } h1{ font-size:35px; letter-spacing:-.06em; white-space:nowrap; }
+    .shalat-bar{ margin-top:-70px; padding:16px 10px 14px; } .judul-kecil{ display:block !important; } .judul-kecil span{ display:block; margin-top:5px; }
+    .shalat-grid>div{ padding:0 3px; } .shalat-grid .jam{ font-size:14px; } .shalat-grid .nama{ font-size:8px; letter-spacing:.04em; } .shalat-grid .imam{ font-size:11px; }
+    section{ padding-top:44px; } .tabel-jadwal{ display:block; overflow-x:auto; white-space:nowrap; } .tabel-jadwal th,.tabel-jadwal td{ padding:12px; }
+  }
 </style>
 </head>
 <body>
+<!--
+  THESIS: Portal masjid yang terasa seperti papan informasi resmi: tegas, terbuka, dan cepat dipindai, bukan dashboard generik.
+  OWN-WORLD: Mode Terang; kertas putih, blok kuning rata, tinta hijau tua, garis 1px, sudut kecil, tanpa bayangan.
+  STORY: Jamaah melihat waktu dan agenda terdekat, lalu dapat masuk ke laporan keuangan atau menyalin rekening infak.
+  FIRST VIEWPORT: Header putih ringkas, blok identitas kuning di kiri, jadwal shalat sebagai pita data, dan agenda Jumat sebagai bukti utama.
+  FORM: Editorial information board; diadaptasi dari sistem visual Masjid Al-Muslimun pada design.md.
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
 
 <nav class="topnav">
   <div class="wrap topnav-inner">
@@ -212,15 +293,6 @@
     </div>
   </section>
 
-  <!-- Jadwal kajian / kegiatan dari Google Sheet -->
-  <section>
-    <div class="eyebrow">Jadwal &amp; Kegiatan</div>
-    <div id="jadwal-container">
-      <p class="catatan-data">Memuat data dari Google Sheet…</p>
-    </div>
-    <p class="catatan-data">Data yang sama dengan layar TV masjid — diperbarui langsung oleh pengurus DKM.</p>
-  </section>
-
   <!-- Transparansi -->
   <section>
     <div class="eyebrow">Transparansi Keuangan</div>
@@ -249,7 +321,6 @@
         a.n. Mukhsy Nuralam &mdash; Bendahara DKM Al&#8209;Muslimun
       </div>
       <button class="btn-salin" id="btn-salin" type="button">Salin nomor rekening</button>
-      <p class="qris-ket">QRIS infak tersedia di kotak amal dan papan pengumuman masjid.</p>
     </div>
   </section>
 </div>
@@ -285,13 +356,55 @@ const CONFIG = {
   REKENING: "7339737287",
 
   // Kota untuk jadwal shalat (API Aladhan, metode Kemenag).
-  KOTA: "Bogor"
+  KOTA: "Bogor",
+
+  // Sheet jadwal imam rawatib.
+  IMAM_SHEET_ID: "1ZN02Wa2MfnCsnrxWSpG0waCsR3aF66fGqN_MesVb-Cs",
+  IMAM_SHEET_GID: "0"
+};
+
+const IMAM_FALLBACK = {
+  "Senin":  { "Subuh":"Bpk. Rahmat Suhadi", "Dzuhur":"Bpk. Rakhmat Muharram", "Ashar":"Bpk. Dani", "Magrib":"Bpk. Erwan", "Isya":"Bpk. Yunus Nugraha" },
+  "Selasa": { "Subuh":"Bpk. Yunus Nugraha", "Dzuhur":"Bpk. Dani", "Ashar":"Bpk. Ahmad Chozin", "Magrib":"Bpk. Dani", "Isya":"Bpk. Rahmat Suhadi" },
+  "Rabu":   { "Subuh":"Bpk. Yunus Nugraha", "Dzuhur":"Bpk. Dani", "Ashar":"Bpk. Sudirman", "Magrib":"Bpk. Ahmad Chozin", "Isya":"Bpk. Dani" },
+  "Kamis":  { "Subuh":"Bpk. Dani", "Dzuhur":"Bpk. Rakhmat Muharram", "Ashar":"Bpk. Dani", "Magrib":"Bpk. Sudirman", "Isya":"Bpk. Pranoto" },
+  "Jumat":  { "Subuh":"Bpk. Pranoto", "Dzuhur":"Khotib Jumat", "Ashar":"Bpk. Dani", "Magrib":"Bpk. Yunus Nugraha", "Isya":"Bpk. Sudirman" },
+  "Sabtu":  { "Subuh":"Bpk. Yunus Nugraha", "Dzuhur":"Bpk. Rakhmat Muharram", "Ashar":"Bpk. Dani", "Magrib":"Bpk. Pranoto", "Isya":"Bpk. Rahmat Suhadi" },
+  "Ahad":   { "Subuh":"Ustad pengisi ceramah subuh", "Dzuhur":"Bpk. Hardjanto", "Ashar":"Bpk. Erwan", "Magrib":"Bpk. Rahmat Suhadi", "Isya":"Bpk. Yunus Nugraha" }
 };
 
 /* ---------- Tanggal hari ini ---------- */
 const hariIni = new Date();
 document.getElementById("tanggal-hari-ini").textContent =
   hariIni.toLocaleDateString("id-ID", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+
+/* ---------- Jadwal imam rawatib dari Sheet ---------- */
+async function bacaJadwalImam(){
+  const fallback = IMAM_FALLBACK;
+  const dayNames = ["Ahad","Senin","Selasa","Rabu","Kamis","Jumat","Sabtu"];
+  const result = {};
+  Object.entries(fallback).forEach(([day, prayers]) => Object.entries(prayers).forEach(([prayer, imam]) => {
+    const key = prayer === "Magrib" ? "Maghrib" : prayer;
+    result[key] ||= {};
+    result[key][day] = imam;
+  }));
+  try{
+    const url = `https://docs.google.com/spreadsheets/d/${CONFIG.IMAM_SHEET_ID}/gviz/tq?tqx=out:json&gid=${CONFIG.IMAM_SHEET_GID}`;
+    const res = await fetch(url);
+    const teks = await res.text();
+    const json = JSON.parse(teks.substring(teks.indexOf("{"), teks.lastIndexOf("}")+1));
+    const rows = json.table.rows || [];
+    const headers = (json.table.cols || []).map(c => c.label || "");
+    rows.forEach(row => {
+      const cells = row.c || [];
+      const rawPrayer = cells[1]?.v || cells[0]?.v;
+      const prayer = rawPrayer === "Magrib" ? "Maghrib" : rawPrayer;
+      if(!prayer) return;
+      headers.forEach((header, i) => { if(dayNames.includes(header)) result[prayer][header] = cells[i]?.v || "—"; });
+    });
+  }catch(e){ /* gunakan snapshot terakhir jika sheet tidak tersedia anonim */ }
+  return result;
+}
 
 /* ---------- Jadwal shalat (Aladhan, metode 20 = Kemenag RI) ---------- */
 (async function jadwalShalat(){
@@ -302,6 +415,8 @@ document.getElementById("tanggal-hari-ini").textContent =
     const t = data.data.timings;
     const urutan = [["Subuh",t.Fajr],["Dzuhur",t.Dhuhr],["Ashar",t.Asr],["Maghrib",t.Maghrib],["Isya",t.Isha]];
     const grid = document.getElementById("shalat-grid");
+    const dayName = hariIni.toLocaleDateString("id-ID", { weekday:"long" });
+    const imamByPrayer = await bacaJadwalImam();
     grid.innerHTML = "";
     const jamSekarang = hariIni.getHours()*60 + hariIni.getMinutes();
     let idxAktif = 0;
@@ -312,48 +427,11 @@ document.getElementById("tanggal-hari-ini").textContent =
     urutan.forEach((u,i)=>{
       const div = document.createElement("div");
       if(i === idxAktif) div.className = "aktif";
-      div.innerHTML = `<div class="nama">${u[0]}</div><div class="jam">${u[1]}</div>`;
+      const imam = imamByPrayer[u[0]]?.[dayName] || "—";
+      div.innerHTML = `<div class="nama">${u[0]}</div><div class="jam">${u[1]}</div><div class="imam">${imam}</div>`;
       grid.appendChild(div);
     });
   }catch(e){ /* biarkan tampilan default "—" bila gagal */ }
-})();
-
-/* ---------- Baca Google Sheet via GViz ---------- */
-async function bacaSheet(){
-  const tabParam = CONFIG.SHEET_TAB ? `&sheet=${encodeURIComponent(CONFIG.SHEET_TAB)}` : "";
-  const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json${tabParam}`;
-  const res = await fetch(url);
-  const teks = await res.text();
-  // Respons GViz dibungkus fungsi — ambil JSON di dalamnya
-  const json = JSON.parse(teks.substring(teks.indexOf("{"), teks.lastIndexOf("}")+1));
-  const kolom = json.table.cols.map(c => c.label || "");
-  const baris = json.table.rows.map(r => r.c.map(sel => (sel && sel.f) ? sel.f : (sel && sel.v != null ? String(sel.v) : "")));
-  return { kolom, baris };
-}
-
-(async function tampilkanJadwal(){
-  const wadah = document.getElementById("jadwal-container");
-  try{
-    const { kolom, baris } = await bacaSheet();
-    if(baris.length === 0) throw new Error("kosong");
-
-    // ---- Tabel kegiatan: sembunyikan kolom teknis Google Form (Timestamp, Email) ----
-    const sembunyi = ["timestamp", "email"];
-    const idx = kolom
-      .map((k, i) => i)
-      .filter(i => kolom[i] && !sembunyi.some(s => kolom[i].toLowerCase().includes(s)));
-
-    const tabel = document.createElement("table");
-    tabel.className = "tabel-jadwal";
-    tabel.innerHTML =
-      "<thead><tr>" + idx.map(i => `<th>${kolom[i]}</th>`).join("") + "</tr></thead>" +
-      "<tbody>" + baris.map(b => "<tr>" + idx.map(i => `<td>${b[i] || ""}</td>`).join("") + "</tr>").join("") + "</tbody>";
-    wadah.innerHTML = "";
-    wadah.appendChild(tabel);
-  }catch(e){
-    wadah.innerHTML = `<p class="catatan-data">Jadwal belum dapat dimuat. Pastikan Google Sheet di-share
-      "Siapa saja yang memiliki link — Pelihat", lalu muat ulang halaman ini.</p>`;
-  }
 })();
 
 /* ---------- Kartu "Jumat Pekan Ini": khotib Jumat + kuliah subuh ---------- */
