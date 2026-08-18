@@ -291,7 +291,7 @@
 
   <!-- Jumat pekan ini -->
   <section>
-    <div class="eyebrow">Jumat Pekan Ini</div>
+    <div class="eyebrow" id="label-pekan-jumat">Jumat Pekan Ini</div>
     <div class="kartu-jumat" id="kartu-jumat">
       <div class="label">Shalat Jumat</div>
       <div class="isi" id="isi-jumat">Memuat jadwal…</div>
@@ -456,8 +456,31 @@ async function bacaJadwalImam(){
 })();
 
 /* ---------- Kartu "Jumat Pekan Ini": khotib Jumat + kuliah subuh ---------- */
+/* testable:pilihPekanJumat:start */
+function pilihPekanJumat(items, tanggalAcuan = new Date()){
+  const awalPekan = new Date(tanggalAcuan);
+  awalPekan.setHours(0, 0, 0, 0);
+  const hari = awalPekan.getDay();
+  awalPekan.setDate(awalPekan.getDate() + (hari === 0 ? -6 : 1 - hari));
+
+  const akhirPekan = new Date(awalPekan);
+  akhirPekan.setDate(akhirPekan.getDate() + 6);
+  akhirPekan.setHours(23, 59, 59, 999);
+
+  const urut = [...items].sort((a, b) => a.jumat - b.jumat);
+  const pekanIni = urut.find(x => x.jumat >= awalPekan && x.jumat <= akhirPekan);
+  if(pekanIni) return { pekan: pekanIni, label: "Jumat Pekan Ini" };
+
+  const pekanLalu = urut.filter(x => x.jumat < awalPekan).at(-1);
+  if(pekanLalu) return { pekan: pekanLalu, label: "Jumat Pekan Lalu" };
+
+  return { pekan: urut[0], label: "Jumat Mendatang" };
+}
+/* testable:pilihPekanJumat:end */
+
 (async function tampilkanJumat(){
   const isiJumat = document.getElementById("isi-jumat");
+  const labelPekan = document.getElementById("label-pekan-jumat");
   try{
     const url = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/gviz/tq?tqx=out:json&gid=${CONFIG.GID_JUMAT}`;
     const res = await fetch(url);
@@ -479,11 +502,8 @@ async function bacaJadwalImam(){
     })).filter(x => x.jumat);
     if(items.length === 0) throw new Error("tanpa tanggal");
 
-    // Pilih "pekan ini": entri paling awal yang jadwalnya belum lewat.
-    // Pakai tanggal kajian (lebih akhir) agar kartu tetap tampil sampai kajian Ahad.
-    const kini = new Date(); kini.setHours(0, 0, 0, 0);
-    items.sort((a, b) => a.jumat - b.jumat);
-    const pekan = items.find(x => (x.kajian || x.jumat) >= kini) || items[items.length - 1];
+    const { pekan, label } = pilihPekanJumat(items);
+    labelPekan.textContent = label;
 
     const fmt = d => d ? d.toLocaleDateString("id-ID", { weekday:"long", day:"numeric", month:"long", year:"numeric" }) : "";
     isiJumat.innerHTML = `
