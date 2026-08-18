@@ -219,13 +219,18 @@
   .tabel-jadwal th{ background:var(--ink); color:var(--yellow); font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em; padding:14px 16px; }
   .tabel-jadwal td{ border-bottom:1px solid var(--line); color:var(--body); font-size:14px; padding:16px; }
   .catatan-data{ color:var(--muted); font-family:'IBM Plex Mono',monospace; font-size:12px; line-height:1.6; margin-top:12px; }
-  .kartu-baris{ gap:16px; }
+  .kartu-baris{ gap:16px; grid-template-columns:1fr; }
   .kartu{ background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:24px; }
   .kartu:hover,.kartu:focus-visible{ background:var(--yellow); transform:none; }
   .kartu:focus-visible,.btn-salin:focus-visible{ outline:2px solid var(--brand); outline-offset:3px; }
   .kartu h3{ color:var(--ink); font-family:'Archivo Black','Archivo',sans-serif; font-size:24px; letter-spacing:-.04em; line-height:1; }
   .kartu p{ color:var(--body); font-size:16px; margin-top:12px; }
   .kartu .buka{ color:var(--ink); font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; letter-spacing:.08em; margin-top:20px; text-transform:uppercase; }
+  .neraca-summary{ border-top:1px solid var(--border); display:grid; gap:14px; grid-template-columns:repeat(3,minmax(0,1fr)); margin-top:20px; padding-top:18px; }
+  .neraca-summary .metric{ min-width:0; }
+  .neraca-summary .metric-label,.neraca-summary .summary-status,.neraca-summary .periode{ color:var(--muted); font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
+  .neraca-summary .metric-value{ color:var(--ink); display:block; font-family:'Archivo',sans-serif; font-size:18px; font-weight:800; line-height:1.2; margin-top:5px; overflow-wrap:anywhere; }
+  .neraca-summary .periode{ grid-column:1/-1; }
   .infak{ background:var(--ink); border:0; border-radius:6px; color:#EDF1E4; padding:28px 30px; }
   .infak .rek{ background:#24391A; border:1px solid #456136; border-radius:3px; color:#C8E0AC; font-family:'IBM Plex Mono',monospace; font-size:14px; margin-top:20px; padding:16px 18px; }
   .infak .rek strong{ color:var(--yellow); font-size:24px; letter-spacing:.02em; }
@@ -247,6 +252,8 @@
     .shalat-grid .nama{ font-size:12px; letter-spacing:.08em; }
     .shalat-grid .jam{ font-size:18px; margin:0 16px; }
     .shalat-grid .imam{ font-size:14px; line-height:1.25; margin:0; min-height:0; text-align:right; }
+    .neraca-summary{ grid-template-columns:1fr; }
+    .neraca-summary .periode{ grid-column:auto; }
     section{ padding-top:44px; } .tabel-jadwal{ display:block; overflow-x:auto; white-space:nowrap; } .tabel-jadwal th,.tabel-jadwal td{ padding:12px; }
   }
 </style>
@@ -311,7 +318,10 @@
     <div class="kartu-baris">
       <a class="kartu" href="neraca/">
         <h3>Neraca Keuangan 2026</h3>
-        <p>Saldo, pemasukan, dan penyaluran dana masjid — diperbarui real&#8209;time.</p>
+        <p>Ringkasan laporan keuangan bulan terbaru.</p>
+        <div class="neraca-summary" id="neraca-summary" aria-live="polite">
+          <span class="summary-status">Memuat ringkasan…</span>
+        </div>
         <span class="buka">Buka laporan &rarr;</span>
       </a>
       <a class="kartu" href="zis/">
@@ -372,7 +382,11 @@ const CONFIG = {
 
   // Sheet jadwal imam rawatib.
   IMAM_SHEET_ID: "1ZN02Wa2MfnCsnrxWSpG0waCsR3aF66fGqN_MesVb-Cs",
-  IMAM_SHEET_GID: "0"
+  IMAM_SHEET_GID: "0",
+
+  // Sheet laporan Neraca dan tahun laporan yang tampil pada kartu ringkasan.
+  NERACA_SHEET_ID: "1K-jZr5HYtYLJ-QCcEVFTb3R9TSumR352aAIdq_eFzJo",
+  NERACA_TAHUN: "2026"
 };
 
 const IMAM_FALLBACK = {
@@ -524,6 +538,75 @@ function pilihPekanJumat(items, tanggalAcuan = new Date()){
       </div>`;
   }catch(e){
     isiJumat.textContent = "Jadwal Jumat akan tampil di sini setelah Sheet tersambung.";
+  }
+})();
+
+/* ---------- Ringkasan Neraca bulan terbaru ---------- */
+/* testable:ringkasanNeraca:start */
+function pilihSheetNeracaTerbaru(html){
+  const bulan = {
+    JAN:{ nama:"Januari",urutan:1 }, FEB:{ nama:"Februari",urutan:2 }, MAR:{ nama:"Maret",urutan:3 },
+    APR:{ nama:"April",urutan:4 }, MEI:{ nama:"Mei",urutan:5 }, JUN:{ nama:"Juni",urutan:6 },
+    JUL:{ nama:"Juli",urutan:7 }, AGT:{ nama:"Agustus",urutan:8 }, AGU:{ nama:"Agustus",urutan:8 },
+    AGS:{ nama:"Agustus",urutan:8 }, AGST:{ nama:"Agustus",urutan:8 }, AGUST:{ nama:"Agustus",urutan:8 },
+    AUG:{ nama:"Agustus",urutan:8 }, SEP:{ nama:"September",urutan:9 }, OKT:{ nama:"Oktober",urutan:10 },
+    OCT:{ nama:"Oktober",urutan:10 }, NOV:{ nama:"November",urutan:11 }, DES:{ nama:"Desember",urutan:12 },
+    DEC:{ nama:"Desember",urutan:12 }
+  };
+  const sheet = [];
+  const pola = /items\.push\(\{name:\s*"([^"]+)",\s*pageUrl:\s*"[^"]*gid=(\d+)"/g;
+  let cocok;
+  while((cocok = pola.exec(html)) !== null){
+    const namaSheet = cocok[1].replace(/\\x27/g,"'");
+    const namaBesar = namaSheet.toUpperCase();
+    if(!namaBesar.includes("PENGELUARAN")) continue;
+    const kode = Object.keys(bulan).find(k => namaBesar.includes(k));
+    if(kode) sheet.push({ nama:bulan[kode].nama, gid:cocok[2], urutan:bulan[kode].urutan });
+  }
+  return sheet.sort((a,b) => a.urutan-b.urutan).at(-1) || null;
+}
+
+function parseRingkasanNeraca(table){
+  let saldoAwal = 0, pemasukan = 0, pengeluaran = 0, saldoAkhir = 0;
+  const nominal = value => {
+    if(typeof value === "number") return value;
+    const angka = String(value ?? "").replace(/[^0-9,-]/g,"").replace(/,/g,".");
+    return Number.parseFloat(angka) || 0;
+  };
+  (table.rows || []).forEach(row => {
+    const cells = row.c || [];
+    const uraianMasuk = String(cells[2]?.v || "").toLowerCase();
+    const uraianKeluar = String(cells[6]?.v || "").toLowerCase();
+    if(uraianMasuk.includes("saldo bulan")) saldoAwal = nominal(cells[3]?.v);
+    if(uraianMasuk.includes("jumlah penerimaan bulan ini")) pemasukan = nominal(cells[3]?.v);
+    if(uraianKeluar.includes("jumlah pengeluaran bulan ini")) pengeluaran = nominal(cells[7]?.v);
+    if(uraianKeluar.includes("saldo kas masjid")) saldoAkhir = nominal(cells[7]?.v);
+  });
+  if(saldoAkhir === 0) saldoAkhir = saldoAwal + pemasukan - pengeluaran;
+  return { pemasukan, pengeluaran, saldoAkhir };
+}
+/* testable:ringkasanNeraca:end */
+
+(async function tampilkanRingkasanNeraca(){
+  const elemen = document.getElementById("neraca-summary");
+  const formatRupiah = value => new Intl.NumberFormat("id-ID", { style:"currency", currency:"IDR", maximumFractionDigits:0 }).format(value);
+  try{
+    const daftar = await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.NERACA_SHEET_ID}/htmlview`);
+    const sheet = pilihSheetNeracaTerbaru(await daftar.text());
+    if(!sheet) throw new Error("sheet Neraca tidak ditemukan");
+
+    const respons = await fetch(`https://docs.google.com/spreadsheets/d/${CONFIG.NERACA_SHEET_ID}/gviz/tq?tqx=out:json&gid=${sheet.gid}`);
+    const teks = await respons.text();
+    const json = JSON.parse(teks.substring(teks.indexOf("{"), teks.lastIndexOf("}")+1));
+    const ringkasan = parseRingkasanNeraca(json.table);
+
+    elemen.innerHTML = `
+      <div class="metric"><span class="metric-label">Saldo akhir</span><strong class="metric-value">${formatRupiah(ringkasan.saldoAkhir)}</strong></div>
+      <div class="metric"><span class="metric-label">Pemasukan</span><strong class="metric-value">${formatRupiah(ringkasan.pemasukan)}</strong></div>
+      <div class="metric"><span class="metric-label">Pengeluaran</span><strong class="metric-value">${formatRupiah(ringkasan.pengeluaran)}</strong></div>
+      <span class="periode">Periode ${sheet.nama} ${CONFIG.NERACA_TAHUN}</span>`;
+  }catch(e){
+    elemen.innerHTML = '<span class="summary-status">Data sementara tidak tersedia</span>';
   }
 })();
 
