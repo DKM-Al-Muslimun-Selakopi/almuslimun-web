@@ -3,7 +3,7 @@
  * Sumber: Google Sheet jadwal rawatib
  * 
  * Struktur: imam_rawatib[hari_ke][shalat] = nama_imam
- * hari_ke: 1=Senin, 2=Selasa, ... 7=Minggu
+ * hari_ke: 1=Senin, 2=Selasa, ... 7=Ahad
  */
 
 // Mapping nama shalat → jam (WIB)
@@ -15,8 +15,8 @@ const WAKTU_SHALAT = {
   isya: { nama: 'Isya', jam: '19:00' }
 };
 
-// Mapping hari (1=Senin..7=Minggu)
-const DAYS = ['', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+// Mapping hari (1=Senin..7=Ahad)
+const DAYS = ['', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Ahad'];
 
 // Jadwal Imam Rawatib Tetap
 // Data dari: https://docs.google.com/spreadsheets/d/1ZN02Wa2MfnCsnrxWSpG0waCsR3aF66fGqN_MesVb-Cs
@@ -69,7 +69,7 @@ const IMAM_RAWATIB = {
     maghrib: 'Prawoto',
     isya: 'Rahmat Suhadi'
   },
-  // Minggu
+  // Ahad
   7: {
     subuh: null, // Ustad ceramah subuh
     dzuhur: 'Hardjanto',
@@ -85,8 +85,8 @@ const IMAM_RAWATIB = {
  * @returns {Array} [{shalat, nama, jam, waktu_kirim}]
  */
 function getJadwalHariIni(date) {
-  const dayIndex = date.getDay(); // 0=Minggu, 1=Senin
-  // Convert JS day (0=Minggu) ke index kita (1=Senin..7=Minggu)
+  const dayIndex = date.getDay(); // 0=Ahad, 1=Senin
+  // Convert JS day (0=Ahad) ke index kita (1=Senin..7=Ahad)
   const idx = dayIndex === 0 ? 7 : dayIndex;
   
   const jadwal = IMAM_RAWATIB[idx];
