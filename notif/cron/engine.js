@@ -104,7 +104,7 @@ async function main() {
   const jadwalHariIni = getJadwalHariIni(nowWIB);
   const kontakImam = await getContacts();
   
-  console.log(`  Jadwal hari ini (${['','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'][nowWIB.getDay()===0?7:nowWIB.getDay()]}): ${jadwalHariIni.length} shalat`);
+  console.log(`  Jadwal hari ini (${['','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Ahad'][nowWIB.getDay()===0?7:nowWIB.getDay()]}): ${jadwalHariIni.length} shalat`);
 
   for (const jadwal of jadwalHariIni) {
     // Parse waktu kirim (2 jam sebelum)

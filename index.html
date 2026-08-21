@@ -400,9 +400,15 @@ const IMAM_FALLBACK = {
 };
 
 /* ---------- Tanggal hari ini ---------- */
+/* testable:formatTanggalHari:start */
+function formatTanggalHari(date, options = { weekday:"long", day:"numeric", month:"long", year:"numeric" }){
+  return date.toLocaleDateString("id-ID", options).replace(/^Minggu\b/, "Ahad");
+}
+/* testable:formatTanggalHari:end */
+
 const hariIni = new Date();
 document.getElementById("tanggal-hari-ini").textContent =
-  hariIni.toLocaleDateString("id-ID", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
+  formatTanggalHari(hariIni);
 
 /* ---------- Jadwal imam rawatib dari Sheet ---------- */
 async function bacaJadwalImam(){
@@ -457,7 +463,7 @@ async function bacaJadwalImam(){
     const t = data.data.timings;
     const urutan = [["Subuh",t.Fajr],["Dzuhur",t.Dhuhr],["Ashar",t.Asr],["Maghrib",t.Maghrib],["Isya",t.Isha]];
     const grid = document.getElementById("shalat-grid");
-    const dayName = hariIni.toLocaleDateString("id-ID", { weekday:"long" });
+    const dayName = formatTanggalHari(hariIni, { weekday:"long" });
     const imamByPrayer = await bacaJadwalImam();
     grid.innerHTML = "";
     const jamSekarang = hariIni.getHours()*60 + hariIni.getMinutes();
@@ -526,7 +532,7 @@ function pilihPekanJumat(items, tanggalAcuan = new Date()){
     const { pekan, label } = pilihPekanJumat(items);
     labelPekan.textContent = label;
 
-    const fmt = d => d ? d.toLocaleDateString("id-ID", { weekday:"long", day:"numeric", month:"long", year:"numeric" }) : "";
+    const fmt = d => d ? formatTanggalHari(d) : "";
     isiJumat.innerHTML = `
       <span class="peran">Khotib</span><strong>${pekan.khotib || "—"}</strong>
       <div class="baris-tgl">${fmt(pekan.jumat)}</div>

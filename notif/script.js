@@ -104,7 +104,7 @@ const WAKTU_SHALAT_RAWATIB = {
 };
 
 const SHALAT_LIST = ['subuh', 'dzuhur', 'ashar', 'maghrib', 'isya'];
-const HARI = ['', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
+const HARI = ['', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Ahad'];
 
 // Jadwal imam rawatib: IMAM_RAWATIB[hari_ke][shalat] = nama_imam
 const IMAM_RAWATIB = {
@@ -119,7 +119,7 @@ const IMAM_RAWATIB = {
 
 function getJadwalImam(date) {
   if (!date) date = new Date();
-  let day = date.getDay(); // 0=Minggu
+  let day = date.getDay(); // 0=Ahad
   let idx = day === 0 ? 7 : day;
   const jadwal = IMAM_RAWATIB[idx] || {};
   return SHALAT_LIST.map(s => ({
@@ -129,7 +129,7 @@ function getJadwalImam(date) {
   }));
 }
 const TUGAS_STANDAR = ['Bersih Karpet', 'Isi Aqua Galon', 'Ganti Mukena', 'Sapu Halaman', 'Periksa Toilet', 'Periksa Wudhu'];
-const DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+const DAYS = ['Ahad', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
 let currentTab = 'dashboard';
